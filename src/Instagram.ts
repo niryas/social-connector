@@ -1,8 +1,6 @@
-import dayjs from "dayjs";
-import SocialConnector, {
-	DIRECTION,
-	SocialPhotoType,
-} from "./SocialConnector";
+import SocialConnector, { DIRECTION, SocialPhotoType } from "./SocialConnector";
+import { InstagramInstanceOptions } from "./interfaces/InstagramInstanceOptions.ts";
+import {TokenBackendResponse} from "./types/APIResponses.ts";
 
 enum MEDIA_TYPE {
 	IMAGE = "IMAGE",
@@ -26,17 +24,51 @@ type IGAuthResponseError = {
 };
 export type IGAuthResponse = IGAuthResponseCode | IGAuthResponseError;
 
+/** Token is set to expire in 59 minutes */
+const TOKEN_EXPIRY = 59 * 60 * 1000;
+
+/** Instagram OAuth URL API Endpoint */
+const INSTAGRAM_AUTH_URL = "https://api.instagram.com/oauth/authorize";
+
+
 export default class Instagram extends SocialConnector {
 	private static init = false;
 	private static instance: Instagram;
 	private tokenExpiry = 0;
 	private redirectUri = "";
 	private static photos: Array<SocialPhotoType> = [];
+	private tokenBackend = "";
 
-	public static getInstance(): Instagram {
-		if (Instagram.init) return Instagram.instance;
-		Instagram.instance = new Instagram();
-		Instagram.init = true;
+	public static getInstance(options?: InstagramInstanceOptions): Instagram {
+		if (options?.appId) {
+			Instagram.setAppId(options.appId);
+		}
+
+		if (!Instagram.appId) {
+			throw new Error(
+				"Cannot initialize Instagram Social Connector without app id",
+			);
+		}
+
+		if (!Instagram.init) {
+			Instagram.instance = new Instagram();
+			Instagram.init = true;
+		}
+
+		if (options?.redirectUri) {
+			Instagram.instance.setRedirectUri(options.redirectUri);
+		}
+
+		if (!Instagram.instance.redirectUri) {
+			throw new Error(
+				"Cannot initialize Instagram Social Connector without a redirect uri",
+			);
+		}
+
+		if (options?.tokenBackend) {
+			Instagram.instance.tokenBackend = options.tokenBackend;
+		}
+
 		return Instagram.instance;
 	}
 
@@ -44,39 +76,43 @@ export default class Instagram extends SocialConnector {
 		this.redirectUri = uri;
 	}
 
+	get authFullUrl(): string {
+		return `${INSTAGRAM_AUTH_URL}?client_id=${Instagram.appId}&redirect_uri=${this.redirectUri}` +
+            "&response_type=code&scope=user_profile,user_media";
+	}
+
+	public login() {
+		window.location.href = this.authFullUrl;
+	}
+
 	requestAccess(): Promise<void> {
-		if (this.accessToken && dayjs(this.tokenExpiry).isAfter(dayjs())) {
+		if (this.accessToken && (this.tokenExpiry > Date.now())) {
 			return Promise.resolve();
 		}
 		return Promise.reject(new Error("token invalid"));
 	}
 
 	async requestToken(authCode: string): Promise<void> {
-		const result = await window.$nuxt.$axios.$post<{
-			// eslint-disable-next-line camelcase
-			access_token?: string;
-			// eslint-disable-next-line camelcase
-			user_id?: string;
-		}>(API_URL.IG_TOKEN, {
+		const result = await this.api.post<TokenBackendResponse>(this.tokenBackend, {
 			code: authCode,
 			uri: this.redirectUri,
 		});
 		if (!("access_token" in result)) {
 			return Promise.reject(new Error("No access token provided"));
 		}
-		this.tokenExpiry = dayjs().add(59, "m").unix();
+		this.tokenExpiry = Date.now() + TOKEN_EXPIRY;
 		this.setToken(result);
 		return Promise.resolve();
 	}
 
 	async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhotoType>> {
-		const result = await window.$nuxt.$axios.$get<{
+		const result = await this.api.get<{
 			data: Array<IGPhotoType>;
 			paging: any;
 		}>(
 			`https://graph.instagram.com/me/media?fields=id,media_type,media_url${this.pagingQueryUrl(
-				direction
-			)}&access_token=${this.accessToken}`
+				direction,
+			)}&access_token=${this.accessToken}`,
 		);
 		Instagram.photos = [];
 		for (const photo of result.data) {
@@ -98,7 +134,7 @@ export default class Instagram extends SocialConnector {
 	}
 
 	private static parsePhotoData(
-		data: IGPhotoType
+		data: IGPhotoType,
 	): undefined | SocialPhotoType {
 		if (data.media_type !== MEDIA_TYPE.IMAGE) return;
 		return {
@@ -112,7 +148,7 @@ export default class Instagram extends SocialConnector {
 		return Promise.resolve(uri);
 	}
 
-	public static buildAuthObject(response: string): IGAuthResponse {
+	public buildAuthObject(response: string): IGAuthResponse {
 		const searchParams = new URLSearchParams(response);
 		let authObj: IGAuthResponse;
 		if (searchParams.has("code")) {
@@ -124,7 +160,8 @@ export default class Instagram extends SocialConnector {
 				error: searchParams.get("error") || "generic_error",
 				errorReason: searchParams.get("error_reason") || "",
 				errorDescription:
-            searchParams.get("error_description") || "An error occurred",
+                    searchParams.get("error_description") ||
+                    "An error occurred",
 			};
 		}
 		return authObj;

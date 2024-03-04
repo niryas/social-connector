@@ -1,3 +1,5 @@
+import API from "./API.ts";
+
 type IGAuthResponse = {
 	// eslint-disable-next-line camelcase
 	access_token?: string;
@@ -6,9 +8,9 @@ type IGAuthResponse = {
 };
 
 // eslint-disable-next-line no-undef
-type FBAuthResponse = facebook.AuthResponse;
+// type FBAuthResponse = facebook.AuthResponse;
 
-export type SocialAuthResponse = IGAuthResponse | FBAuthResponse;
+export type SocialAuthResponse = IGAuthResponse;
 
 export enum DIRECTION {
 	NEXT,
@@ -28,13 +30,21 @@ export default abstract class SocialConnector {
 	protected userId: string = "";
 	protected after: string = "";
 	protected before: string = "";
+	protected api: API;
+
+	/** Social Connector classes are singletons. Use "getInstance()" method. */
+	protected constructor() {
+		this.api = new API();
+	}
 
 	protected setToken(authResponse: SocialAuthResponse) {
-		if ("accessToken" in authResponse)
-			this.accessToken = authResponse.accessToken || "";
+		// Following commented lines are part of the FB integration:
+		// if ("accessToken" in authResponse)
+		// 	this.accessToken = authResponse.accessToken || "";
+		// if ("userID" in authResponse) this.userId = authResponse.userID || "";
+
 		if ("access_token" in authResponse)
 			this.accessToken = authResponse.access_token || "";
-		if ("userID" in authResponse) this.userId = authResponse.userID || "";
 		if ("user_id" in authResponse) this.userId = authResponse.user_id || "";
 	}
 
