@@ -92,11 +92,8 @@ export default class Instagram extends SocialConnector {
 		const result = await this.api.get<{
 			data: Array<IGPhoto>;
 			paging: any;
-		}>(
-			`https://graph.instagram.com/me/media?fields=id,media_type,media_url${this.pagingQueryUrl(
-				direction,
-			)}&access_token=${this.accessToken}`,
-		);
+		}>(this.mediaApiUrl(direction));
+
 		Instagram.photos = [];
 		for (const photo of result.data) {
 			const parsedData = Instagram.parsePhotoData(photo);
@@ -106,6 +103,12 @@ export default class Instagram extends SocialConnector {
 		}
 		this.setPaginationCursors(result);
 		return Promise.resolve(Instagram.photos);
+	}
+
+	private mediaApiUrl(direction?: DIRECTION): string {
+		return `https://graph.instagram.com/me/media?fields=id,media_type,media_url${this.pagingQueryUrl(
+			direction,
+		)}&access_token=${this.accessToken}`;
 	}
 
 	private pagingQueryUrl(direction?: DIRECTION): string {
