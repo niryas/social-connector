@@ -1,28 +1,11 @@
 import SocialConnector, { DIRECTION, SocialPhotoType } from "./SocialConnector";
 import { InstagramInstanceOptions } from "./interfaces/InstagramInstanceOptions.ts";
-import {TokenBackendResponse} from "./types/APIResponses.ts";
-
-enum MEDIA_TYPE {
-	IMAGE = "IMAGE",
-	VIDEO = "VIDEO",
-	CAROUSEL_ALBUM = "CAROUSEL_ALBUM",
-}
-
-type IGPhotoType = {
-	id: string;
-	// eslint-disable-next-line camelcase
-	media_type: MEDIA_TYPE;
-	// eslint-disable-next-line camelcase
-	media_url: string;
-};
-
-type IGAuthResponseCode = { code: string; state?: string };
-type IGAuthResponseError = {
-	error: string;
-	errorReason: string;
-	errorDescription: string;
-};
-export type IGAuthResponse = IGAuthResponseCode | IGAuthResponseError;
+import {
+	IGAuthResponse,
+	IGPhotoType,
+	MEDIA_TYPE,
+	TokenBackendResponse
+} from "./types/APIResponses.ts";
 
 /** Token is set to expire in 59 minutes */
 const TOKEN_EXPIRY = 59 * 60 * 1000;
