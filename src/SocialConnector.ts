@@ -17,7 +17,7 @@ export enum DIRECTION {
 	PREVIOUS,
 }
 
-export type SocialPhotoType = { id: string; picture: string };
+export type SocialPhoto = { id: string; picture: string };
 
 export interface PaginationFields {
 	after?: string;
@@ -93,7 +93,7 @@ export default abstract class SocialConnector {
 
 	public abstract getPhotos(
 		direction?: DIRECTION
-	): Promise<Array<SocialPhotoType>>;
+	): Promise<Array<SocialPhoto>>;
 
 	public static getPhotoUrl(_id: string): Promise<string> {
 		return Promise.resolve("");

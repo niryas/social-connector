@@ -11,7 +11,7 @@ export enum MEDIA_TYPE {
 	CAROUSEL_ALBUM = "CAROUSEL_ALBUM",
 }
 
-export type IGPhotoType = {
+export type IGPhoto = {
 	id: string;
 	// eslint-disable-next-line camelcase
 	media_type: MEDIA_TYPE;

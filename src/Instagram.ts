@@ -1,8 +1,8 @@
-import SocialConnector, { DIRECTION, SocialPhotoType } from "./SocialConnector";
+import SocialConnector, { DIRECTION, SocialPhoto } from "./SocialConnector";
 import { InstagramInstanceOptionsInterface } from "./interfaces/InstagramInstanceOptionsInterface.ts";
 import {
 	IGAuthResponse,
-	IGPhotoType,
+	IGPhoto,
 	MEDIA_TYPE,
 	TokenBackendResponse
 } from "./types/APIResponses.ts";
@@ -19,7 +19,7 @@ export default class Instagram extends SocialConnector {
 	private static instance: Instagram;
 	private tokenExpiry = 0;
 	private redirectUri = "";
-	private static photos: Array<SocialPhotoType> = [];
+	private static photos: Array<SocialPhoto> = [];
 	private tokenBackend = "";
 
 	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
@@ -88,9 +88,9 @@ export default class Instagram extends SocialConnector {
 		return Promise.resolve();
 	}
 
-	async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhotoType>> {
+	async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhoto>> {
 		const result = await this.api.get<{
-			data: Array<IGPhotoType>;
+			data: Array<IGPhoto>;
 			paging: any;
 		}>(
 			`https://graph.instagram.com/me/media?fields=id,media_type,media_url${this.pagingQueryUrl(
@@ -117,8 +117,8 @@ export default class Instagram extends SocialConnector {
 	}
 
 	private static parsePhotoData(
-		data: IGPhotoType,
-	): undefined | SocialPhotoType {
+		data: IGPhoto,
+	): undefined | SocialPhoto {
 		if (data.media_type !== MEDIA_TYPE.IMAGE) return;
 		return {
 			id: data.id,
