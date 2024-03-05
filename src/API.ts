@@ -1,9 +1,9 @@
-import {InterfaceAPI} from "./interfaces/API.ts";
+import {APIInterface} from "./interfaces/API.ts";
 
 const GET = "GET";
 const POST = "POST";
 
-export default class API implements InterfaceAPI {
+export default class API implements APIInterface {
 	get<T>(url: string): Promise<T> {
 		return fetch(url, {method: GET}).then(this.handleResult<T>);
 	}

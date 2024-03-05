@@ -1,4 +1,4 @@
-export interface InstagramInstanceOptions {
+export interface InstagramInstanceOptionsInterface {
 	/** Instagram app id as set in the Meta Developer Center */
 	appId?: string;
 

@@ -1,5 +1,5 @@
 import SocialConnector, { DIRECTION, SocialPhotoType } from "./SocialConnector";
-import { InstagramInstanceOptions } from "./interfaces/InstagramInstanceOptions.ts";
+import { InstagramInstanceOptionsInterface } from "./interfaces/InstagramInstanceOptionsInterface.ts";
 import {
 	IGAuthResponse,
 	IGPhotoType,
@@ -22,7 +22,7 @@ export default class Instagram extends SocialConnector {
 	private static photos: Array<SocialPhotoType> = [];
 	private tokenBackend = "";
 
-	public static getInstance(options?: InstagramInstanceOptions): Instagram {
+	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
 		if (options?.appId) {
 			Instagram.setAppId(options.appId);
 		}
