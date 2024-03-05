@@ -68,14 +68,14 @@ export default class Instagram extends SocialConnector {
 		window.location.href = this.authFullUrl;
 	}
 
-	requestAccess(): Promise<void> {
+	public requestAccess(): Promise<void> {
 		if (this.accessToken && (this.tokenExpiry > Date.now())) {
 			return Promise.resolve();
 		}
 		return Promise.reject(new Error("token invalid"));
 	}
 
-	async requestToken(authCode: string): Promise<void> {
+	public async requestToken(authCode: string): Promise<void> {
 		const result = await this.api.post<TokenBackendResponse>(this.tokenBackend, {
 			code: authCode,
 			uri: this.redirectUri,
@@ -88,7 +88,7 @@ export default class Instagram extends SocialConnector {
 		return Promise.resolve();
 	}
 
-	async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhoto>> {
+	public async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhoto>> {
 		const result = await this.api.get<{
 			data: Array<IGPhoto>;
 			paging: any;
@@ -126,7 +126,7 @@ export default class Instagram extends SocialConnector {
 		};
 	}
 
-	static getPhotoUrl(id: string): Promise<string> {
+	public static getPhotoUrl(id: string): Promise<string> {
 		const uri = Instagram.photos.find((p) => p.id === id)?.picture || "";
 		return Promise.resolve(uri);
 	}
