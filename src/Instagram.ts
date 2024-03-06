@@ -1,5 +1,5 @@
 import SocialConnector, { DIRECTION, SocialPhoto } from "./SocialConnector";
-import { InstagramInstanceOptionsInterface } from "./interfaces/InstagramInstanceOptionsInterface.ts";
+import { InstagramInstanceOptionsInterface } from "./interfaces/InstagramInstanceOptions.ts";
 import {
 	IGAuthResponse,
 	IGPhoto,

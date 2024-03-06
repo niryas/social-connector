@@ -1,6 +1,6 @@
 import { describe, expect, test, beforeEach, afterEach } from "vitest";
 import Instagram from "../src/Instagram";
-import {InstagramInstanceOptionsInterface} from "../src/interfaces/InstagramInstanceOptionsInterface";
+import {InstagramInstanceOptionsInterface} from "../src/interfaces/InstagramInstanceOptions";
 
 
 describe("Instagram", () => {
