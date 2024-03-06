@@ -60,11 +60,11 @@ export default class Instagram extends SocialConnector {
             "&response_type=code&scope=user_profile,user_media";
 	}
 
-	public login() {
+	private login() {
 		window.location.href = this.authFullUrl;
 	}
 
-	public requestAccess(): Promise<void> {
+	private requestAccess(): Promise<void> {
 		if (this.accessToken && (this.tokenExpiry > Date.now())) {
 			return Promise.resolve();
 		}

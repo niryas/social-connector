@@ -86,8 +86,6 @@ export default abstract class SocialConnector {
 
 	public abstract clickHandler(): void;
 
-	public abstract requestAccess(isNative?: boolean): Promise<void>;
-
 	public abstract getPhotos(
 		direction?: DIRECTION
 	): Promise<Array<SocialPhoto>>;
