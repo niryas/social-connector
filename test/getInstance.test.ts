@@ -13,7 +13,7 @@ describe("Instagram", () => {
 		};
 	});
 	afterEach(() => {
-		Instagram.init = false;
+		Instagram["init"] = false;
 	});
 
 
@@ -21,9 +21,9 @@ describe("Instagram", () => {
 		test("creates new instance with appId, redirectUri & tokenBackend", () => {
 			const instance = Instagram.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
-			expect(instance.appId).toBe(instanceOptions.appId);
-			expect(instance.redirectUri).toBe(instanceOptions.redirectUri);
-			expect(instance.tokenBackend).toBe(instanceOptions.tokenBackend);
+			expect(instance["appId"]).toBe(instanceOptions.appId);
+			expect(instance["redirectUri"]).toBe(instanceOptions.redirectUri);
+			expect(instance["tokenBackend"]).toBe(instanceOptions.tokenBackend);
 		});
 
 		test("throws an error when no appId is provided", () => {
