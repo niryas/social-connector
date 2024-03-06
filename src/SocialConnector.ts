@@ -32,7 +32,7 @@ export default abstract class SocialConnector {
 	protected api: API;
 
 	/** Social Connector classes are singletons. Use "getInstance()" method. */
-	protected constructor(protected appId: string) {
+	protected constructor(protected appId: string, protected afterTokenFunction: () => void) {
 		this.api = new API();
 	}
 
@@ -83,6 +83,8 @@ export default abstract class SocialConnector {
 	public showPrevious(): boolean {
 		return this.before !== "";
 	}
+
+	public abstract clickHandler(): void;
 
 	public abstract requestAccess(isNative?: boolean): Promise<void>;
 

@@ -7,11 +7,16 @@ const igRedirectUri = import.meta.env.VITE_IG_REDIRECT_URI;
 
 let photos = ref([]);
 
+let ig: Instagram;
+
 onMounted(() => {
-	const ig = Instagram.getInstance({
+	ig = Instagram.getInstance({
 		appId: igAppId,
 		redirectUri: igRedirectUri,
 		tokenBackend: "http://localhost:8000/api/ig_token/",
+		async afterTokenFunction() {
+			photos.value = await ig.getPhotos();
+		},
 	});
 
 	// @TODO: Move to a separate return uri file and use localstorage (like in Loomino)
@@ -27,31 +32,16 @@ onMounted(() => {
 		return;
 	}
 	ig.requestToken(authObj.code).then(() => {
-		continueIGFlow(ig);
+		// continueIGFlow(ig);
 	});
 });
-
-async function continueIGFlow(ig: Instagram) {
-	photos.value = await ig.getPhotos();
-}
-
-const clickHandler = () => {
-	const ig = Instagram.getInstance();
-	ig.requestAccess()
-		.then(() => {
-			continueIGFlow(ig);
-		})
-		.catch(() => {
-			ig.login();
-		});
-};
 
 </script>
 
 <template>
 <div>
 	<p>Vue app {{ igAppId }}</p>
-	<button type="button" @click="clickHandler">Connect to Instagram</button>
+	<button type="button" @click="ig.clickHandler">Connect to Instagram</button>
 	<div>
 		<img v-for="photo in photos" :key="photo.id" :src="photo.picture" />
 	</div>

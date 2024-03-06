@@ -22,13 +22,15 @@ export default class Instagram extends SocialConnector {
 	private static photos: Array<SocialPhoto> = [];
 	private tokenBackend = "";
 
-	private constructor({appId}: InstagramInstanceOptionsInterface) {
+	private constructor({appId, afterTokenFunction}: InstagramInstanceOptionsInterface) {
 		if (!appId) {
 			throw new Error(
 				"Cannot initialize Instagram Social Connector without an app id",
 			);
 		}
-		super(appId);
+		super(appId, afterTokenFunction ?? (() => {
+			console.error("Social Connector initialized without an afterTokenFunction");
+		}));
 	}
 	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
 		if (!Instagram.init) {
@@ -80,6 +82,16 @@ export default class Instagram extends SocialConnector {
 		this.tokenExpiry = Date.now() + TOKEN_EXPIRY;
 		this.setToken(result);
 		return Promise.resolve();
+	}
+
+	public clickHandler() {
+		this.requestAccess()
+			.then(() => {
+				this.afterTokenFunction();
+			})
+			.catch(() => {
+				this.login();
+			});
 	}
 
 	public async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhoto>> {
