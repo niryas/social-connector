@@ -29,7 +29,7 @@ export default class Instagram extends SocialConnector {
 
 		if (!Instagram.appId) {
 			throw new Error(
-				"Cannot initialize Instagram Social Connector without app id",
+				"Cannot initialize Instagram Social Connector without an app id",
 			);
 		}
 
