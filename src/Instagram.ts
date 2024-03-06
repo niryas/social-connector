@@ -53,7 +53,7 @@ export default class Instagram extends SocialConnector {
 		return Instagram.instance;
 	}
 
-	get authFullUrl(): string {
+	private get authFullUrl(): string {
 		return `${INSTAGRAM_AUTH_URL}?client_id=${this.appId}&redirect_uri=${this.redirectUri}` +
             "&response_type=code&scope=user_profile,user_media";
 	}
