@@ -37,7 +37,7 @@ export default class Instagram extends SocialConnector {
 		}
 
 		if (options?.redirectUri) {
-			Instagram.instance.setRedirectUri(options.redirectUri);
+			Instagram.instance.redirectUri = options.redirectUri;
 		}
 
 		if (!Instagram.instance.redirectUri) {
@@ -51,10 +51,6 @@ export default class Instagram extends SocialConnector {
 		}
 
 		return Instagram.instance;
-	}
-
-	public setRedirectUri(uri: string) {
-		this.redirectUri = uri;
 	}
 
 	get authFullUrl(): string {
