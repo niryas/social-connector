@@ -25,7 +25,6 @@ export interface PaginationFields {
 }
 
 export default abstract class SocialConnector {
-	protected static appId: string;
 	protected accessToken: string = "";
 	protected userId: string = "";
 	protected after: string = "";
@@ -33,7 +32,7 @@ export default abstract class SocialConnector {
 	protected api: API;
 
 	/** Social Connector classes are singletons. Use "getInstance()" method. */
-	protected constructor() {
+	protected constructor(protected appId: string) {
 		this.api = new API();
 	}
 
@@ -83,10 +82,6 @@ export default abstract class SocialConnector {
 
 	public showPrevious(): boolean {
 		return this.before !== "";
-	}
-
-	public static setAppId(appId: string) {
-		SocialConnector.appId = appId;
 	}
 
 	public abstract requestAccess(isNative?: boolean): Promise<void>;

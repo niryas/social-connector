@@ -22,19 +22,17 @@ export default class Instagram extends SocialConnector {
 	private static photos: Array<SocialPhoto> = [];
 	private tokenBackend = "";
 
-	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
-		if (options?.appId) {
-			Instagram.setAppId(options.appId);
-		}
-
-		if (!Instagram.appId) {
+	private constructor({appId}: InstagramInstanceOptionsInterface) {
+		if (!appId) {
 			throw new Error(
 				"Cannot initialize Instagram Social Connector without an app id",
 			);
 		}
-
+		super(appId);
+	}
+	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
 		if (!Instagram.init) {
-			Instagram.instance = new Instagram();
+			Instagram.instance = new Instagram(options ?? {});
 			Instagram.init = true;
 		}
 
@@ -60,7 +58,7 @@ export default class Instagram extends SocialConnector {
 	}
 
 	get authFullUrl(): string {
-		return `${INSTAGRAM_AUTH_URL}?client_id=${Instagram.appId}&redirect_uri=${this.redirectUri}` +
+		return `${INSTAGRAM_AUTH_URL}?client_id=${this.appId}&redirect_uri=${this.redirectUri}` +
             "&response_type=code&scope=user_profile,user_media";
 	}
 
