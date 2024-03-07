@@ -84,8 +84,8 @@ export default class Instagram extends SocialConnector {
 		return Promise.resolve();
 	}
 
-	public clickHandler() {
-		this.requestAccess()
+	public async clickHandler() {
+		return this.requestAccess()
 			.then(() => {
 				this.afterTokenFunction();
 			})
