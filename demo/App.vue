@@ -18,22 +18,6 @@ onMounted(() => {
 			photos.value = await ig.getPhotos();
 		},
 	});
-
-	// @TODO: Move to a separate return uri file and use localstorage (like in Loomino)
-	const queryString = document.location.search;
-	if (!queryString) {
-		return;
-	}
-
-	// @TODO: Move this logic to the Instagram class instance
-	const authObj = ig.buildAuthObject(queryString);
-	if (!authObj || "error" in authObj) {
-		console.error(authObj);
-		return;
-	}
-	ig.requestToken(authObj.code).then(() => {
-		// continueIGFlow(ig);
-	});
 });
 
 </script>

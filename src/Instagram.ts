@@ -52,6 +52,8 @@ export default class Instagram extends SocialConnector {
 			Instagram.instance.tokenBackend = options.tokenBackend;
 		}
 
+		Instagram.instance.processRedirect();
+
 		return Instagram.instance;
 	}
 
@@ -157,6 +159,24 @@ export default class Instagram extends SocialConnector {
 			};
 		}
 		return authObj;
+	}
+
+	private afterAuthRedirect(queryString: string) {
+		const authObj = this.buildAuthObject(queryString);
+		if (!authObj || "error" in authObj) {
+			console.error(authObj);
+			return;
+		}
+		this.requestToken(authObj.code).then(() => {
+			this.afterTokenFunction();
+		});
+	}
+
+	private processRedirect() {
+		const queryString = window.localStorage.getItem("igAuth");
+		if (!queryString) return;
+		window.localStorage.removeItem("igAuth");
+		this.afterAuthRedirect(queryString);
 	}
 
 	public static getUserId(): string {
