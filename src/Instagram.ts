@@ -164,10 +164,10 @@ export default class Instagram extends SocialConnector {
 	private afterAuthRedirect(queryString: string) {
 		const authObj = this.buildAuthObject(queryString);
 		if (!authObj || "error" in authObj) {
-			console.error(authObj);
+			console.error(authObj ?? "Error authenticating with Instagram");
 			return;
 		}
-		this.requestToken(authObj.code).then(() => {
+		return this.requestToken(authObj.code).then(() => {
 			this.afterTokenFunction();
 		});
 	}
@@ -176,7 +176,7 @@ export default class Instagram extends SocialConnector {
 		const queryString = window.localStorage.getItem("igAuth");
 		if (!queryString) return;
 		window.localStorage.removeItem("igAuth");
-		this.afterAuthRedirect(queryString);
+		this.afterAuthRedirect(queryString)?.catch(() => console.error("error in redirection"));
 	}
 
 	public static getUserId(): string {
