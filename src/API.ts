@@ -18,12 +18,10 @@ export default class API implements APIInterface {
 	}
 
 	private async handleResult<T>(data: Response): Promise<T> {
-		const jsonData = await data.json();
-
 		if (!data.ok) {
 			return Promise.reject(data);
 		}
 
-		return jsonData;
+		return data.json();
 	}
 }
