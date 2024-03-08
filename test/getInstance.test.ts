@@ -17,6 +17,14 @@ const handlers = [
 			}, {status: 400});
 		}
 
+		if (data["code"] === "returnErrorBut200") {
+			return HttpResponse.json({
+				"error_type": "OAuthException",
+				"code": 400,
+				"error_message": "Invalid authorization code"
+			}, {status: 200});
+		}
+
 		if (data["code"] === "returnToken") {
 			console.log("returnting testToken");
 			return HttpResponse.json({
@@ -116,6 +124,17 @@ describe("Instagram", () => {
 		});
 		test("handles IG API errors gracefully", async () => {
 			storage.getItem.mockImplementation(() => "?code=returnError");
+			const spy = vi.spyOn(console, "error");
+			const instance = Instagram.getInstance(instanceOptions);
+			expect(instance).toBeDefined();
+
+			await vi.waitFor(() => {
+				expect(spy).toHaveBeenCalled();
+			});
+			expect(spy).toHaveBeenCalled();
+		});
+		test("handles IG API errors gracefully when api resolves without token", async () => {
+			storage.getItem.mockImplementation(() => "?code=returnErrorBut200");
 			const spy = vi.spyOn(console, "error");
 			const instance = Instagram.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
