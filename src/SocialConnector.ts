@@ -1,4 +1,5 @@
 import API from "./API.ts";
+import {Pageable} from "./interfaces/Pagination.ts";
 
 type IGAuthResponse = {
 	// eslint-disable-next-line camelcase
@@ -18,11 +19,6 @@ export enum DIRECTION {
 }
 
 export type SocialPhoto = { id: string; picture: string };
-
-export interface PaginationFields {
-	after?: string;
-	before?: string;
-}
 
 export default abstract class SocialConnector {
 	protected accessToken: string = "";
@@ -56,13 +52,7 @@ export default abstract class SocialConnector {
 		return params;
 	}
 
-	protected setPaginationCursors(response: {
-		paging?: {
-			next?: string;
-			cursors?: { after: string; before: string };
-			previous?: string;
-		};
-	}) {
+	protected setPaginationCursors(response: Partial<Pageable>) {
 		if (!response.paging) return;
 		if (response.paging.next) {
 			this.after = response.paging.cursors?.after || "";

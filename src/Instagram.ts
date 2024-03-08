@@ -6,6 +6,7 @@ import {
 	MEDIA_TYPE,
 	TokenBackendResponse
 } from "./types/APIResponses.ts";
+import {Pageable} from "./interfaces/Pagination.ts";
 
 /** Token is set to expire in 59 minutes */
 const TOKEN_EXPIRY = 59 * 60 * 1000;
@@ -99,8 +100,7 @@ export default class Instagram extends SocialConnector {
 	public async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhoto>> {
 		const result = await this.api.get<{
 			data: Array<IGPhoto>;
-			paging: any;
-		}>(this.mediaApiUrl(direction));
+		} & Partial<Pageable>>(this.mediaApiUrl(direction));
 
 		Instagram.photos = [];
 		for (const photo of result.data) {
