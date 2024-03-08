@@ -43,6 +43,7 @@ export default abstract class SocialConnector {
 		if ("user_id" in authResponse) this.userId = authResponse.user_id || "";
 	}
 
+	/* The following code is relevant for the FB integration
 	protected addDirectionToParams(params: any, direction?: DIRECTION) {
 		if (this.after !== "" && direction === DIRECTION.NEXT)
 			params.after = this.after;
@@ -50,7 +51,7 @@ export default abstract class SocialConnector {
 			params.before = this.before;
 
 		return params;
-	}
+	} */
 
 	protected setPaginationCursors(response: Partial<Pageable>) {
 		if (!response.paging) return;
