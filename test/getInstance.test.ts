@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach, afterEach } from "vitest";
+import { describe, expect, test, beforeEach, afterEach, vi } from "vitest";
 import Instagram from "../src/Instagram";
 import {InstagramInstanceOptionsInterface} from "../src/interfaces/InstagramInstanceOptions";
 
@@ -42,6 +42,15 @@ describe("Instagram", () => {
 			const instance = Instagram.getInstance(instanceOptions);
 			const anotherInstance = Instagram.getInstance(instanceOptions);
 			expect(anotherInstance).toBe(instance);
+		});
+	});
+
+	describe("default afterTokenFunction", () => {
+		test("logs console error when called", () => {
+			const spy = vi.spyOn(console, "error");
+			const instance = Instagram.getInstance(instanceOptions);
+			instance["afterTokenFunction"]();
+			expect(spy).toHaveBeenCalled();
 		});
 	});
 });
