@@ -74,7 +74,7 @@ export default class Instagram extends SocialConnector {
 		return Promise.reject(new Error("token invalid"));
 	}
 
-	public async requestToken(authCode: string): Promise<void> {
+	private async requestToken(authCode: string): Promise<void> {
 		const result = await this.api.post<TokenBackendResponse>(this.tokenBackend, {
 			code: authCode,
 			uri: this.redirectUri,
@@ -142,7 +142,7 @@ export default class Instagram extends SocialConnector {
 		return Promise.resolve(uri);
 	}
 
-	public buildAuthObject(response: string): IGAuthResponse {
+	private buildAuthObject(response: string): IGAuthResponse {
 		const searchParams = new URLSearchParams(response);
 		let authObj: IGAuthResponse;
 		if (searchParams.has("code")) {
