@@ -8,7 +8,7 @@ export interface InstagramInstanceOptionsInterface {
 	redirectUri?: string;
 
 	/** Full URL to token handling backend endpoint */
-	tokenBackend?: string;
+	tokenBackendUri?: string;
 
 	/** Function to call after access token is available */
 	afterTokenFunction?: () => void;

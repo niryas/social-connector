@@ -21,7 +21,7 @@ export default class Instagram extends SocialConnector {
 	private tokenExpiry = 0;
 	private redirectUri = "";
 	private static photos: Array<SocialPhoto> = [];
-	private tokenBackend = "";
+	private tokenBackendUri = "";
 
 	private constructor({appId, afterTokenFunction, api}: InstagramInstanceOptionsInterface) {
 		if (!appId) {
@@ -49,8 +49,8 @@ export default class Instagram extends SocialConnector {
 			);
 		}
 
-		if (options?.tokenBackend) {
-			Instagram.instance.tokenBackend = options.tokenBackend;
+		if (options?.tokenBackendUri) {
+			Instagram.instance.tokenBackendUri = options.tokenBackendUri;
 		}
 
 		Instagram.instance.processRedirect();
@@ -75,7 +75,7 @@ export default class Instagram extends SocialConnector {
 	}
 
 	private async requestToken(authCode: string): Promise<void> {
-		const result = await this.api.post<TokenBackendResponse>(this.tokenBackend, {
+		const result = await this.api.post<TokenBackendResponse>(this.tokenBackendUri, {
 			code: authCode,
 			uri: this.redirectUri,
 		});

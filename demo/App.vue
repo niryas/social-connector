@@ -13,7 +13,7 @@ onMounted(() => {
 	ig = Instagram.getInstance({
 		appId: igAppId,
 		redirectUri: igRedirectUri,
-		tokenBackend: "http://localhost:8000/api/ig_token/",
+		tokenBackendUri: "http://localhost:8000/api/ig_token/",
 		async afterTokenFunction() {
 			photos.value = await ig.getPhotos();
 		},

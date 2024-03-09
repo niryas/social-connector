@@ -46,7 +46,7 @@ describe("Instagram", () => {
 		instanceOptions = {
 			appId: "appId",
 			redirectUri: "https://redirect.example.com",
-			tokenBackend: "http://tokenBackend",
+			tokenBackendUri: "http://tokenBackend",
 		};
 	});
 	afterEach(() => {
@@ -60,7 +60,7 @@ describe("Instagram", () => {
 			expect(instance).toBeDefined();
 			expect(instance["appId"]).toBe(instanceOptions.appId);
 			expect(instance["redirectUri"]).toBe(instanceOptions.redirectUri);
-			expect(instance["tokenBackend"]).toBe(instanceOptions.tokenBackend);
+			expect(instance["tokenBackendUri"]).toBe(instanceOptions.tokenBackendUri);
 		});
 
 		test("can use a custom API class", () => {

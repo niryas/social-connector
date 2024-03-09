@@ -10,7 +10,7 @@ describe("Instagram clickHandler", () => {
 		instanceOptions = {
 			appId: "appId",
 			redirectUri: "https://redirect.example.com",
-			tokenBackend: "http://tokenBackend",
+			tokenBackendUri: "http://tokenBackend",
 			afterTokenFunction: mockAfterToken,
 		};
 	});
