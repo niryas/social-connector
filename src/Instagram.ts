@@ -32,6 +32,20 @@ export default class Instagram extends SocialConnector {
 			console.error("Social Connector initialized without an afterTokenFunction");
 		}), api);
 	}
+	/** The Instagram class is a Singleton object. Use the getInstance() method to get
+	 *  or instantiate an instance.
+	 *
+	 *  On the first call to getInstance, a required options {InstagramInstanceOptionsInterface} parameter
+	 *  is required. The call will fail without it.
+	 *
+	 *  Subsequent calls to getInstance will work without any parameters.
+	 *
+	 * @param options {InstagramInstanceOptionsInterface} - options object. Required for initialization,
+	 * optional when getting an instantiated instance.
+	 *
+	 * Changing the options object on further calls to getInstance is not supported and may be removed
+	 * at any point.
+	 * */
 	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
 		if (!Instagram.instance) {
 			Instagram.instance = new Instagram(options ?? {});
@@ -61,6 +75,7 @@ export default class Instagram extends SocialConnector {
             "&response_type=code&scope=user_profile,user_media";
 	}
 
+	/** Redirects the browser to Instagram's inner URL for authentication and authorization. */
 	private login() {
 		window.location.href = this.authFullUrl;
 	}
@@ -85,6 +100,11 @@ export default class Instagram extends SocialConnector {
 		return Promise.resolve();
 	}
 
+	/** Handler function that can be directly used as a click handler for the
+	 * "Connect with Instagram" button, or can be called inside the event handler.
+	 *
+	 * @see demo
+	 * */
 	public async clickHandler() {
 		return this.requestAccess()
 			.then(() => {
@@ -170,6 +190,7 @@ export default class Instagram extends SocialConnector {
 		});
 	}
 
+	/** Check whether this is a redirect (after Instagram login screen), and if so, handle it. */
 	private processRedirect() {
 		const queryString = window.localStorage.getItem("igAuth");
 		if (!queryString) return;
