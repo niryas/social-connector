@@ -16,7 +16,6 @@ const INSTAGRAM_AUTH_URL = "https://api.instagram.com/oauth/authorize";
 
 
 export default class Instagram extends SocialConnector {
-	private static init = false;
 	private static instance: Instagram;
 	private tokenExpiry = 0;
 	private redirectUri = "";
@@ -34,9 +33,8 @@ export default class Instagram extends SocialConnector {
 		}), api);
 	}
 	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
-		if (!Instagram.init) {
+		if (!Instagram.instance) {
 			Instagram.instance = new Instagram(options ?? {});
-			Instagram.init = true;
 		}
 
 		if (options?.redirectUri) {

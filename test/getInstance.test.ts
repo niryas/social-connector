@@ -50,7 +50,7 @@ describe("Instagram", () => {
 		};
 	});
 	afterEach(() => {
-		Instagram["init"] = false;
+		Instagram["instance"] = undefined;
 	});
 
 

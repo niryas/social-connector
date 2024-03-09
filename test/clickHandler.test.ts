@@ -15,7 +15,7 @@ describe("Instagram clickHandler", () => {
 		};
 	});
 	afterEach(() => {
-		Instagram["init"] = false;
+		Instagram["instance"] = undefined;
 	});
 
 	test("calls afterTokenFunction if token is valid", async () => {
