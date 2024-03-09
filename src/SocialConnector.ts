@@ -1,5 +1,6 @@
 import API from "./API.ts";
 import {Pageable} from "./interfaces/Pagination.ts";
+import APIAbstract from "./APIAbstract.ts";
 
 type IGAuthResponse = {
 	// eslint-disable-next-line camelcase
@@ -25,11 +26,15 @@ export default abstract class SocialConnector {
 	protected userId: string = "";
 	protected after: string = "";
 	protected before: string = "";
-	protected api: API;
+	protected api: APIAbstract;
 
 	/** Social Connector classes are singletons. Use "getInstance()" method. */
-	protected constructor(protected appId: string, protected afterTokenFunction: () => void) {
-		this.api = new API();
+	protected constructor(
+		protected appId: string,
+		protected afterTokenFunction: () => void,
+		customApi?: new () => APIAbstract
+	) {
+		this.api = customApi ? new customApi() : new API();
 	}
 
 	protected setToken(authResponse: SocialAuthResponse) {

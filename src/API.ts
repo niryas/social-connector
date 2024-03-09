@@ -1,9 +1,10 @@
 import {APIInterface} from "./interfaces/API.ts";
+import APIAbstract from "./APIAbstract.ts";
 
 const GET = "GET";
 const POST = "POST";
 
-export default class API implements APIInterface {
+export default class API extends APIAbstract implements APIInterface {
 	get<T>(url: string): Promise<T> {
 		return fetch(url, {method: GET}).then(this.handleResult<T>);
 	}

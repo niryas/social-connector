@@ -3,6 +3,7 @@ import Instagram from "../src/Instagram";
 import {InstagramInstanceOptionsInterface} from "../src/interfaces/InstagramInstanceOptions";
 import {http, HttpResponse} from "msw";
 import {setupServer} from "msw/node";
+import APIAbstract from "../src/APIAbstract";
 
 const handlers = [
 	http.post("http://tokenBackend", async ({request}) => {
@@ -36,6 +37,8 @@ const handlers = [
 
 const server = setupServer(...handlers);
 
+const dummyFetch = vi.fn();
+
 
 describe("Instagram", () => {
 	let instanceOptions: InstagramInstanceOptionsInterface;
@@ -58,6 +61,30 @@ describe("Instagram", () => {
 			expect(instance["appId"]).toBe(instanceOptions.appId);
 			expect(instance["redirectUri"]).toBe(instanceOptions.redirectUri);
 			expect(instance["tokenBackend"]).toBe(instanceOptions.tokenBackend);
+		});
+
+		test("can use a custom API class", () => {
+			class CustomAPI extends APIAbstract {
+				public get<T>(url: string): Promise<T> {
+					dummyFetch(url);
+					return Promise.resolve(<T>"dummyAPI");
+				}
+
+				post<T>(url: string, data: object): Promise<T> {
+					dummyFetch(url, data);
+					return Promise.resolve(<T>"dummyAPI");
+				}
+			}
+
+			instanceOptions.api = CustomAPI;
+			const instance = Instagram.getInstance(instanceOptions);
+			expect(instance).toBeDefined();
+			instance["api"].get("http://localhost");
+			expect(dummyFetch).toHaveBeenCalledOnce();
+			dummyFetch.mockReset();
+			instance["api"].post("http://localhost", {});
+			expect(dummyFetch).toHaveBeenCalledOnce();
+			dummyFetch.mockReset();
 		});
 
 		test("throws an error when no appId is provided", () => {

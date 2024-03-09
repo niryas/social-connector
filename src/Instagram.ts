@@ -23,7 +23,7 @@ export default class Instagram extends SocialConnector {
 	private static photos: Array<SocialPhoto> = [];
 	private tokenBackend = "";
 
-	private constructor({appId, afterTokenFunction}: InstagramInstanceOptionsInterface) {
+	private constructor({appId, afterTokenFunction, api}: InstagramInstanceOptionsInterface) {
 		if (!appId) {
 			throw new Error(
 				"Cannot initialize Instagram Social Connector without an app id",
@@ -31,7 +31,7 @@ export default class Instagram extends SocialConnector {
 		}
 		super(appId, afterTokenFunction ?? (() => {
 			console.error("Social Connector initialized without an afterTokenFunction");
-		}));
+		}), api);
 	}
 	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
 		if (!Instagram.init) {
