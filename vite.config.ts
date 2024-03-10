@@ -1,11 +1,17 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import dts from "vite-plugin-dts";
+import terser from "@rollup/plugin-terser";
 import {coverageConfigDefaults} from "vitest/config";
 
 export default defineConfig({
-	plugins: [vue()],
+	plugins: [
+		vue(),
+		dts({ rollupTypes: true }),
+	],
 	build: {
+		copyPublicDir: false,
 		lib: {
 			entry: resolve(__dirname, "src/main.ts"),
 			name: "SocialConnector",
@@ -18,6 +24,13 @@ export default defineConfig({
 					vue: "Vue",
 				},
 			},
+			plugins: [
+				terser({
+					format: {
+						comments: false,
+					},
+				}),
+			]
 		},
 	},
 	test: {
