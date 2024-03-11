@@ -5,7 +5,9 @@
 	"version": "0.0.0",
 	"type": "module",
 	"files": [
-		"dist"
+		"dist",
+		"LICENSE",
+		"README.md"
 	],
 	"scripts": {
 		"dev": "vite",
