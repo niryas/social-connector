@@ -38,4 +38,17 @@ describe("Instagram clickHandler", () => {
 		await instance.clickHandler();
 		expect(location.href).toContain("instagram.com");
 	});
+
+	test("static method returns instance method", () => {
+		const instance = Instagram.getInstance(instanceOptions);
+		expect(instance).toBeDefined();
+
+		instance.clickHandler = vi.fn();
+		Instagram.clickHandler();
+		expect(instance.clickHandler).toHaveBeenCalledOnce();
+	});
+
+	test("static method errors if instance hasn't been initialized", () => {
+		expect(() => Instagram.clickHandler()).toThrowError("Must call getInstance");
+	});
 });

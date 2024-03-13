@@ -121,6 +121,9 @@ export default class Instagram extends SocialConnector {
 	 * Note: initialization with getInstance is required anyway!
 	 * */
 	public static clickHandler() {
+		if (!this.instance) {
+			throw new Error("Must call getInstance() before calling clickHandler().");
+		}
 		return this.instance.clickHandler();
 	}
 
