@@ -34,7 +34,7 @@ onMounted(() => {
 					<img :src="photo.picture" />
 				</figure>
 			</div>
-			<div v-if="photos.length" class="level pt-4">
+			<div v-if="photos.length" class="level pt-4 is-mobile">
 				<!-- @TODO -->
 				<div class="level-item">
 					<button class="button is-info is-rounded">&lt;&lt; Previous</button>
