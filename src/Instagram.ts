@@ -19,7 +19,7 @@ export default class Instagram extends SocialConnector {
 	private static instance: Instagram;
 	private tokenExpiry = 0;
 	private redirectUri = "";
-	private static photos: Array<SocialPhoto> = [];
+	private photos: Array<SocialPhoto> = [];
 	private tokenBackendUri = "";
 
 	private constructor({appId, afterTokenFunction, api}: InstagramInstanceOptionsInterface) {
@@ -132,15 +132,15 @@ export default class Instagram extends SocialConnector {
 			data: Array<IGPhoto>;
 		} & Partial<Pageable>>(this.mediaApiUrl(direction));
 
-		Instagram.photos = [];
+		this.photos = [];
 		for (const photo of result.data) {
-			const parsedData = Instagram.parsePhotoData(photo);
+			const parsedData = this.parsePhotoData(photo);
 			if (parsedData) {
-				Instagram.photos.push(parsedData);
+				this.photos.push(parsedData);
 			}
 		}
 		this.setPaginationCursors(result);
-		return Promise.resolve(Instagram.photos);
+		return Promise.resolve(this.photos);
 	}
 
 	private mediaApiUrl(direction?: DIRECTION): string {
@@ -157,7 +157,7 @@ export default class Instagram extends SocialConnector {
 		return "";
 	}
 
-	private static parsePhotoData(
+	private parsePhotoData(
 		data: IGPhoto,
 	): undefined | SocialPhoto {
 		if (data.media_type !== MEDIA_TYPE.IMAGE) return;
@@ -168,7 +168,7 @@ export default class Instagram extends SocialConnector {
 	}
 
 	public static getPhotoUrl(id: string): Promise<string> {
-		const uri = Instagram.photos.find((p) => p.id === id)?.picture || "";
+		const uri = this.instance.photos.find((p) => p.id === id)?.picture || "";
 		return Promise.resolve(uri);
 	}
 
