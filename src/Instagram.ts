@@ -115,6 +115,15 @@ export default class Instagram extends SocialConnector {
 			});
 	}
 
+	/** Static method that returns the instance clickHandler.
+	 * To enable usage without additional getInstance() calls.
+	 *
+	 * Note: initialization with getInstance is required anyway!
+	 * */
+	public static clickHandler() {
+		return this.instance.clickHandler();
+	}
+
 	public async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhoto>> {
 		const result = await this.api.get<{
 			data: Array<IGPhoto>;

@@ -7,10 +7,8 @@ const igRedirectUri = import.meta.env.VITE_IG_REDIRECT_URI;
 
 let photos = ref([]);
 
-let ig: Instagram;
-
 onMounted(() => {
-	ig = Instagram.getInstance({
+	let ig = Instagram.getInstance({
 		appId: igAppId,
 		redirectUri: igRedirectUri,
 		tokenBackendUri: "http://localhost:8000/api/ig_token/",
@@ -29,7 +27,7 @@ onMounted(() => {
 			<button
 				type="button"
 				class="button is-primary is-rounded"
-				@click="ig.clickHandler">Connect to Instagram
+				@click="Instagram.clickHandler">Connect to Instagram
 			</button>
 			<div v-if="photos.length" class="tile pt-4 justify-center is-flex-wrap-wrap">
 				<figure v-for="photo in photos" :key="photo.id" class="image">
