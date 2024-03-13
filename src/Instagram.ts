@@ -4,16 +4,15 @@ import {
 	IGAuthResponse,
 	IGPhoto,
 	MEDIA_TYPE,
-	TokenBackendResponse
+	TokenBackendResponse,
 } from "./types/APIResponses.ts";
-import {Pageable} from "./interfaces/Pagination.ts";
+import { Pageable } from "./interfaces/Pagination.ts";
 
 /** Token is set to expire in 59 minutes */
 const TOKEN_EXPIRY = 59 * 60 * 1000;
 
 /** Instagram OAuth URL API Endpoint */
 const INSTAGRAM_AUTH_URL = "https://api.instagram.com/oauth/authorize";
-
 
 export default class Instagram extends SocialConnector {
 	private static instance: Instagram;
@@ -22,15 +21,26 @@ export default class Instagram extends SocialConnector {
 	private photos: Array<SocialPhoto> = [];
 	private tokenBackendUri = "";
 
-	private constructor({appId, afterTokenFunction, api}: InstagramInstanceOptionsInterface) {
+	private constructor({
+		appId,
+		afterTokenFunction,
+		api,
+	}: InstagramInstanceOptionsInterface) {
 		if (!appId) {
 			throw new Error(
 				"Cannot initialize Instagram Social Connector without an app id",
 			);
 		}
-		super(appId, afterTokenFunction ?? (() => {
-			console.error("Social Connector initialized without an afterTokenFunction");
-		}), api);
+		super(
+			appId,
+			afterTokenFunction ??
+				(() => {
+					console.error(
+						"Social Connector initialized without an afterTokenFunction",
+					);
+				}),
+			api,
+		);
 	}
 	/** The Instagram class is a Singleton object. Use the getInstance() method to get
 	 *  or instantiate an instance.
@@ -46,7 +56,9 @@ export default class Instagram extends SocialConnector {
 	 * Changing the options object on further calls to getInstance is not supported and may be removed
 	 * at any point.
 	 * */
-	public static getInstance(options?: InstagramInstanceOptionsInterface): Instagram {
+	public static getInstance(
+		options?: InstagramInstanceOptionsInterface,
+	): Instagram {
 		if (!Instagram.instance) {
 			Instagram.instance = new Instagram(options ?? {});
 		}
@@ -71,8 +83,10 @@ export default class Instagram extends SocialConnector {
 	}
 
 	private get authFullUrl(): string {
-		return `${INSTAGRAM_AUTH_URL}?client_id=${this.appId}&redirect_uri=${this.redirectUri}` +
-            "&response_type=code&scope=user_profile,user_media";
+		return (
+			`${INSTAGRAM_AUTH_URL}?client_id=${this.appId}&redirect_uri=${this.redirectUri}` +
+			"&response_type=code&scope=user_profile,user_media"
+		);
 	}
 
 	/** Redirects the browser to Instagram's inner URL for authentication and authorization. */
@@ -81,17 +95,20 @@ export default class Instagram extends SocialConnector {
 	}
 
 	private requestAccess(): Promise<void> {
-		if (this.accessToken && (this.tokenExpiry > Date.now())) {
+		if (this.accessToken && this.tokenExpiry > Date.now()) {
 			return Promise.resolve();
 		}
 		return Promise.reject(new Error("token invalid"));
 	}
 
 	private async requestToken(authCode: string): Promise<void> {
-		const result = await this.api.post<TokenBackendResponse>(this.tokenBackendUri, {
-			code: authCode,
-			uri: this.redirectUri,
-		});
+		const result = await this.api.post<TokenBackendResponse>(
+			this.tokenBackendUri,
+			{
+				code: authCode,
+				uri: this.redirectUri,
+			},
+		);
 		if (!("access_token" in result)) {
 			return Promise.reject(new Error("No access token provided"));
 		}
@@ -122,15 +139,19 @@ export default class Instagram extends SocialConnector {
 	 * */
 	public static clickHandler() {
 		if (!this.instance) {
-			throw new Error("Must call getInstance() before calling clickHandler().");
+			throw new Error(
+				"Must call getInstance() before calling clickHandler().",
+			);
 		}
 		return this.instance.clickHandler();
 	}
 
 	public async getPhotos(direction?: DIRECTION): Promise<Array<SocialPhoto>> {
-		const result = await this.api.get<{
-			data: Array<IGPhoto>;
-		} & Partial<Pageable>>(this.mediaApiUrl(direction));
+		const result = await this.api.get<
+			{
+				data: Array<IGPhoto>;
+			} & Partial<Pageable>
+		>(this.mediaApiUrl(direction));
 
 		this.photos = [];
 		for (const photo of result.data) {
@@ -157,9 +178,7 @@ export default class Instagram extends SocialConnector {
 		return "";
 	}
 
-	private parsePhotoData(
-		data: IGPhoto,
-	): undefined | SocialPhoto {
+	private parsePhotoData(data: IGPhoto): undefined | SocialPhoto {
 		if (data.media_type !== MEDIA_TYPE.IMAGE) return;
 		return {
 			id: data.id,
@@ -168,7 +187,8 @@ export default class Instagram extends SocialConnector {
 	}
 
 	public static getPhotoUrl(id: string): Promise<string> {
-		const uri = this.instance.photos.find((p) => p.id === id)?.picture || "";
+		const uri =
+			this.instance.photos.find((p) => p.id === id)?.picture || "";
 		return Promise.resolve(uri);
 	}
 
@@ -184,8 +204,8 @@ export default class Instagram extends SocialConnector {
 				error: searchParams.get("error") || "generic_error",
 				errorReason: searchParams.get("error_reason") || "",
 				errorDescription:
-                    searchParams.get("error_description") ||
-                    "An error occurred",
+					searchParams.get("error_description") ||
+					"An error occurred",
 			};
 		}
 		return authObj;
@@ -207,7 +227,9 @@ export default class Instagram extends SocialConnector {
 		const queryString = window.localStorage.getItem("igAuth");
 		if (!queryString) return;
 		window.localStorage.removeItem("igAuth");
-		this.afterAuthRedirect(queryString)?.catch(() => console.error("error in redirection"));
+		this.afterAuthRedirect(queryString)?.catch(() =>
+			console.error("error in redirection"),
+		);
 	}
 
 	public static getUserId(): string {

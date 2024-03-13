@@ -1,36 +1,51 @@
-import {describe, expect, test, beforeEach, afterEach, vi, beforeAll, afterAll} from "vitest";
+import {
+	describe,
+	expect,
+	test,
+	beforeEach,
+	afterEach,
+	vi,
+	beforeAll,
+	afterAll,
+} from "vitest";
 import Instagram from "../src/Instagram";
-import {InstagramInstanceOptionsInterface} from "../src/interfaces/InstagramInstanceOptions";
-import {http, HttpResponse} from "msw";
-import {setupServer} from "msw/node";
+import { InstagramInstanceOptionsInterface } from "../src/interfaces/InstagramInstanceOptions";
+import { http, HttpResponse } from "msw";
+import { setupServer } from "msw/node";
 import APIAbstract from "../src/APIAbstract";
 
 const handlers = [
-	http.post("http://tokenBackend", async ({request}) => {
+	http.post("http://tokenBackend", async ({ request }) => {
 		const data = await request.json();
 		if (!data || !data["code"]) return HttpResponse.json({});
 
 		if (data["code"] === "returnError") {
-			return HttpResponse.json({
-				"error_type": "OAuthException",
-				"code": 400,
-				"error_message": "Invalid authorization code"
-			}, {status: 400});
+			return HttpResponse.json(
+				{
+					error_type: "OAuthException",
+					code: 400,
+					error_message: "Invalid authorization code",
+				},
+				{ status: 400 },
+			);
 		}
 
 		if (data["code"] === "returnErrorBut200") {
-			return HttpResponse.json({
-				"error_type": "OAuthException",
-				"code": 400,
-				"error_message": "Invalid authorization code"
-			}, {status: 200});
+			return HttpResponse.json(
+				{
+					error_type: "OAuthException",
+					code: 400,
+					error_message: "Invalid authorization code",
+				},
+				{ status: 200 },
+			);
 		}
 
 		if (data["code"] === "returnToken") {
 			console.log("returnting testToken");
 			return HttpResponse.json({
-				"access_token": "testToken",
-				"user_id": "testUser",
+				access_token: "testToken",
+				user_id: "testUser",
 			});
 		}
 	}),
@@ -39,7 +54,6 @@ const handlers = [
 const server = setupServer(...handlers);
 
 const dummyFetch = vi.fn();
-
 
 describe("Instagram", () => {
 	let instanceOptions: InstagramInstanceOptionsInterface;
@@ -54,14 +68,15 @@ describe("Instagram", () => {
 		Instagram["instance"] = undefined;
 	});
 
-
 	describe("getInstance", () => {
 		test("creates new instance with appId, redirectUri & tokenBackend", () => {
 			const instance = Instagram.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
 			expect(instance["appId"]).toBe(instanceOptions.appId);
 			expect(instance["redirectUri"]).toBe(instanceOptions.redirectUri);
-			expect(instance["tokenBackendUri"]).toBe(instanceOptions.tokenBackendUri);
+			expect(instance["tokenBackendUri"]).toBe(
+				instanceOptions.tokenBackendUri,
+			);
 		});
 
 		test("throws error if tries to initialize instance with no options", () => {
@@ -94,14 +109,16 @@ describe("Instagram", () => {
 
 		test("throws an error when no appId is provided", () => {
 			instanceOptions.appId = undefined;
-			expect(() => Instagram.getInstance(instanceOptions))
-				.toThrowError("Cannot initialize");
+			expect(() => Instagram.getInstance(instanceOptions)).toThrowError(
+				"Cannot initialize",
+			);
 		});
 
 		test("throws an error when no redirectUri is provided", () => {
 			instanceOptions.redirectUri = undefined;
-			expect(() => Instagram.getInstance(instanceOptions))
-				.toThrowError("Cannot initialize");
+			expect(() => Instagram.getInstance(instanceOptions)).toThrowError(
+				"Cannot initialize",
+			);
 		});
 
 		test("returns the same instance on subsequent calls", () => {
@@ -132,7 +149,7 @@ describe("Instagram", () => {
 			server.resetHandlers();
 			vi.restoreAllMocks();
 		});
-		beforeAll(() => server.listen({ onUnhandledRequest: "error"}));
+		beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 
 		afterAll(() => server.close());
 
@@ -148,7 +165,7 @@ describe("Instagram", () => {
 			expect(storage.removeItem).toHaveBeenCalled();
 		});
 		test("handles errors of the auth token gracefully", () => {
-			storage.getItem.mockImplementation(() => "test");  // No code attribute, will return error
+			storage.getItem.mockImplementation(() => "test"); // No code attribute, will return error
 			const spy = vi.spyOn(console, "error");
 			const instance = Instagram.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
@@ -182,7 +199,7 @@ describe("Instagram", () => {
 			const instance = Instagram.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
 
-			const token =  await vi.waitFor(() => {
+			const token = await vi.waitFor(() => {
 				expect(instance["accessToken"]).toBeTruthy();
 				return instance["accessToken"];
 			});

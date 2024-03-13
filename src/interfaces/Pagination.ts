@@ -8,5 +8,5 @@ export interface Pageable {
 		next?: string;
 		previous?: string;
 		cursors?: PaginationFields;
-	}
+	};
 }

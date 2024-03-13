@@ -1,5 +1,5 @@
 import API from "./API.ts";
-import {Pageable} from "./interfaces/Pagination.ts";
+import { Pageable } from "./interfaces/Pagination.ts";
 import APIAbstract from "./APIAbstract.ts";
 
 type IGAuthResponse = {
@@ -32,7 +32,7 @@ export default abstract class SocialConnector {
 	protected constructor(
 		protected appId: string,
 		protected afterTokenFunction: () => void,
-		customApi?: new () => APIAbstract
+		customApi?: new () => APIAbstract,
 	) {
 		this.api = customApi ? new customApi() : new API();
 	}
@@ -83,7 +83,7 @@ export default abstract class SocialConnector {
 	public abstract clickHandler(): void;
 
 	public abstract getPhotos(
-		direction?: DIRECTION
+		direction?: DIRECTION,
 	): Promise<Array<SocialPhoto>>;
 
 	public static getPhotoUrl(_id: string): Promise<string> {

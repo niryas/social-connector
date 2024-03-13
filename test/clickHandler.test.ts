@@ -1,5 +1,5 @@
-import {afterEach, beforeEach, describe, expect, test, vi} from "vitest";
-import {InstagramInstanceOptionsInterface} from "../src/interfaces/InstagramInstanceOptions";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { InstagramInstanceOptionsInterface } from "../src/interfaces/InstagramInstanceOptions";
 import Instagram from "../src/Instagram";
 
 describe("Instagram clickHandler", () => {
@@ -33,7 +33,10 @@ describe("Instagram clickHandler", () => {
 		expect(instance).toBeDefined();
 
 		const location = { href: "" };
-		Object.defineProperty(window, "location", {value: location, configurable: true});
+		Object.defineProperty(window, "location", {
+			value: location,
+			configurable: true,
+		});
 
 		await instance.clickHandler();
 		expect(location.href).toContain("instagram.com");
@@ -49,6 +52,8 @@ describe("Instagram clickHandler", () => {
 	});
 
 	test("static method errors if instance hasn't been initialized", () => {
-		expect(() => Instagram.clickHandler()).toThrowError("Must call getInstance");
+		expect(() => Instagram.clickHandler()).toThrowError(
+			"Must call getInstance",
+		);
 	});
 });

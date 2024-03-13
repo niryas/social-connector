@@ -3,13 +3,10 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import dts from "vite-plugin-dts";
 import terser from "@rollup/plugin-terser";
-import {coverageConfigDefaults} from "vitest/config";
+import { coverageConfigDefaults } from "vitest/config";
 
 export default defineConfig({
-	plugins: [
-		vue(),
-		dts({ rollupTypes: true }),
-	],
+	plugins: [vue(), dts({ rollupTypes: true })],
 	build: {
 		copyPublicDir: false,
 		lib: {
@@ -30,7 +27,7 @@ export default defineConfig({
 						comments: false,
 					},
 				}),
-			]
+			],
 		},
 	},
 	test: {

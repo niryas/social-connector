@@ -1,4 +1,4 @@
-import {APIInterface} from "./interfaces/API.ts";
+import { APIInterface } from "./interfaces/API.ts";
 
 /** @classdesc Base API Abstract class. Custom implementations of an API service
  * should extend this class.

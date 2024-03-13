@@ -1,52 +1,34 @@
 module.exports = {
-	"env": {
-		"browser": true,
-		"es2021": true
+	env: {
+		browser: true,
+		es2021: true,
 	},
-	"extends": [
+	extends: [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
-		"plugin:vue/vue3-essential"
+		"plugin:vue/vue3-essential",
 	],
-	"overrides": [
+	overrides: [
 		{
-			"env": {
-				"node": true
+			env: {
+				node: true,
 			},
-			"files": [
-				".eslintrc.{js,cjs}"
-			],
-			"parserOptions": {
-				"sourceType": "script"
-			}
-		}
+			files: [".eslintrc.{js,cjs}"],
+			parserOptions: {
+				sourceType: "script",
+			},
+		},
 	],
-	"parserOptions": {
-		"ecmaVersion": "latest",
-		"parser": "@typescript-eslint/parser",
-		"sourceType": "module"
+	parserOptions: {
+		ecmaVersion: "latest",
+		parser: "@typescript-eslint/parser",
+		sourceType: "module",
 	},
-	"plugins": [
-		"@typescript-eslint",
-		"vue",
-		"@stylistic"
-	],
-	"rules": {
-		"@stylistic/indent": [
-			"error",
-			"tab"
-		],
-		"@stylistic/linebreak-style": [
-			"error",
-			"unix"
-		],
-		"@stylistic/quotes": [
-			"error",
-			"double"
-		],
-		"@stylistic/semi": [
-			"error",
-			"always"
-		]
-	}
+	plugins: ["@typescript-eslint", "vue", "@stylistic"],
+	rules: {
+		"@stylistic/indent": ["error", "tab"],
+		"@stylistic/linebreak-style": ["error", "unix"],
+		"@stylistic/quotes": ["error", "double"],
+		"@stylistic/semi": ["error", "always"],
+	},
 };

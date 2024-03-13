@@ -1,7 +1,7 @@
-import {afterAll, afterEach, beforeAll, describe, expect, test} from "vitest";
+import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import API from "../src/API";
-import {http, HttpResponse} from "msw";
-import {setupServer} from "msw/node";
+import { http, HttpResponse } from "msw";
+import { setupServer } from "msw/node";
 
 const handlers = [
 	http.get("http://localhost", () => {
@@ -9,17 +9,17 @@ const handlers = [
 	}),
 
 	http.get("http://localhost/json", () => {
-		return HttpResponse.json({thisIsJson: true});
+		return HttpResponse.json({ thisIsJson: true });
 	}),
 
 	http.get("http://error", () => {
-		return new HttpResponse(null, {status: 400});
+		return new HttpResponse(null, { status: 400 });
 	}),
 
-	http.post("http://localhost/json", async ({request}) => {
+	http.post("http://localhost/json", async ({ request }) => {
 		const data = await request.json();
 		if (!data || !data["thisIsJson"]) {
-			return new HttpResponse(null, {status: 400});
+			return new HttpResponse(null, { status: 400 });
 		}
 
 		const returnValue = {};
@@ -33,7 +33,7 @@ const handlers = [
 const server = setupServer(...handlers);
 
 describe("API", () => {
-	beforeAll(() => server.listen({ onUnhandledRequest: "error"}));
+	beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 
 	afterAll(() => server.close());
 
@@ -43,13 +43,16 @@ describe("API", () => {
 		test("sends a request", async () => {
 			const api = new API();
 
-			const result = await api.get<Record<string, never>>("http://localhost");
+			const result =
+				await api.get<Record<string, never>>("http://localhost");
 			expect(result).toBeDefined();
 		});
 		test("returns a json response", async () => {
 			const api = new API();
 
-			const result = await api.get<{thisIsJson: boolean}>("http://localhost/json");
+			const result = await api.get<{ thisIsJson: boolean }>(
+				"http://localhost/json",
+			);
 			expect(result.thisIsJson).toBeTruthy();
 		});
 		test("raises error if request fails", async () => {
@@ -69,16 +72,16 @@ describe("API", () => {
 		test("sends a post request with data", async () => {
 			const api = new API();
 
-			const data = {thisIsJson: true};
+			const data = { thisIsJson: true };
 			const result = await api.post("http://localhost/json", data);
 			expect(result).toBeDefined();
 		});
 		test("returns a json response", async () => {
 			const api = new API();
 
-			const data = {thisIsJson: true, returnData: true};
+			const data = { thisIsJson: true, returnData: true };
 			const result = await api.post("http://localhost/json", data);
-			expect (result["someData"]).toBeTruthy();
+			expect(result["someData"]).toBeTruthy();
 		});
 		test("raises error if request fails", async () => {
 			const api = new API();
