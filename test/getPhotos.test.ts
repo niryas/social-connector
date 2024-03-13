@@ -1,20 +1,19 @@
 import {http, HttpResponse} from "msw";
 import {setupServer} from "msw/node";
-import {afterAll, afterEach, beforeAll, beforeEach, describe, test, expect} from "vitest";
+import {afterAll, afterEach, beforeAll, beforeEach, describe, expect, test} from "vitest";
 import {InstagramInstanceOptionsInterface} from "../src/interfaces/InstagramInstanceOptions";
 import Instagram from "../src/Instagram";
+import {DIRECTION} from "../src/SocialConnector";
 
 const handlers = [
 	http.get("https://graph.instagram.com/me/media", async ({ request }) => {
 		const url = new URL(request.url);
 		const fields = url.searchParams.get("fields");
 		const accessToken = url.searchParams.get("access_token");
+		const after = url.searchParams.get("after");
+		const before = url.searchParams.get("before");
 
-		if (!fields || !accessToken) {
-			return new HttpResponse(null, {status: 401});
-		}
-
-		return HttpResponse.json({
+		const photoResponse = {
 			"data": [
 				{
 					"id": "1819859339218",
@@ -28,7 +27,19 @@ const handlers = [
 					"after": "afterCursor"
 				}
 			}
-		});
+		};
+
+		if (!fields || !accessToken) {
+			return new HttpResponse(null, {status: 401});
+		}
+
+		if (after) {
+			photoResponse.data[0].media_url += "/media_after";
+		} else if (before) {
+			photoResponse.data[0].media_url += "/media_before";
+		}
+
+		return HttpResponse.json(photoResponse);
 	}),
 ];
 
@@ -65,11 +76,42 @@ describe("Instagram getPhotos() method and related", () => {
 		expect(firstPhoto.picture).toBe("http://localhost/media_url");
 	});
 
+	test("sends after correctly", async () => {
+		const instance = Instagram.getInstance(instanceOptions);
+		instance["accessToken"] = "123";
+		instance["after"] = "afterCursor";
+
+		const photos = await instance.getPhotos(DIRECTION.NEXT);
+
+		expect(photos.length).toBe(1);
+
+		const firstPhoto = photos[0];
+		expect(firstPhoto.picture).toContain("after");
+	});
+
+	test("sends before correctly", async () => {
+		const instance = Instagram.getInstance(instanceOptions);
+		instance["accessToken"] = "123";
+		instance["before"] = "beforeCursor";
+
+		const photos = await instance.getPhotos(DIRECTION.PREVIOUS);
+
+		expect(photos.length).toBe(1);
+
+		const firstPhoto = photos[0];
+		expect(firstPhoto.picture).toContain("before");
+	});
+
 	test("getPhotoUrl() returns Url of requested photo", async () => {
 		const instance = Instagram.getInstance(instanceOptions);
 		instance["accessToken"] = "123";
 		await instance.getPhotos();
 
 		expect(await Instagram.getPhotoUrl("1819859339218")).toBe("http://localhost/media_url");
+	});
+
+	test("getPhotoUrl() returns empty string if no photo found", async () => {
+		Instagram.getInstance(instanceOptions);
+		expect(await Instagram.getPhotoUrl("1819859339218")).toBe("");
 	});
 });

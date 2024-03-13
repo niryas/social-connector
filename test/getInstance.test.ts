@@ -64,6 +64,10 @@ describe("Instagram", () => {
 			expect(instance["tokenBackendUri"]).toBe(instanceOptions.tokenBackendUri);
 		});
 
+		test("throws error if tries to initialize instance with no options", () => {
+			expect(() => Instagram.getInstance()).toThrowError();
+		});
+
 		test("can use a custom API class", () => {
 			class CustomAPI extends APIAbstract {
 				public get<T>(url: string): Promise<T> {
