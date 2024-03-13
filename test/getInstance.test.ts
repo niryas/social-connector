@@ -30,6 +30,7 @@ const handlers = [
 			console.log("returnting testToken");
 			return HttpResponse.json({
 				"access_token": "testToken",
+				"user_id": "testUser",
 			});
 		}
 	}),
@@ -189,6 +190,7 @@ describe("Instagram", () => {
 			expect(token).toBe("testToken");
 			expect(expiryTime).toBeGreaterThan(Date.now() + 58 * 60 * 1000);
 			expect(instanceOptions.afterTokenFunction).toHaveBeenCalled();
+			expect(Instagram.getUserId()).toBe("testUser");
 		});
 	});
 });
