@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import Instagram from "../src/Instagram";
 import { onMounted, ref } from "vue";
+import { DIRECTION } from "../src/SocialConnector";
 
 const igAppId = import.meta.env.VITE_IG_APP_ID;
 const igRedirectUri = import.meta.env.VITE_IG_REDIRECT_URI;
 
 let photos = ref([]);
+let hasNext = ref(false);
+let hasPrevious = ref(false);
+
+async function pageHandler(next?: boolean) {
+	photos.value = await Instagram.getInstance().getPhotos(
+		next ? DIRECTION.NEXT : DIRECTION.PREVIOUS,
+	);
+	hasNext.value = Instagram.getInstance().showNext();
+	hasPrevious.value = Instagram.getInstance().showPrevious();
+}
 
 onMounted(() => {
 	let ig = Instagram.getInstance({
@@ -14,6 +25,8 @@ onMounted(() => {
 		tokenBackendUri: "http://localhost:8000/api/ig_token/",
 		async afterTokenFunction() {
 			photos.value = await ig.getPhotos();
+			hasNext.value = ig.showNext();
+			hasPrevious.value = ig.showPrevious();
 		},
 	});
 });
@@ -39,14 +52,21 @@ onMounted(() => {
 				</figure>
 			</div>
 			<div v-if="photos.length" class="level pt-4 is-mobile">
-				<!-- @TODO -->
 				<div class="level-item">
-					<button class="button is-info is-rounded">
+					<button
+						class="button is-info is-rounded"
+						:disabled="!hasPrevious"
+						@click="pageHandler()"
+					>
 						&lt;&lt; Previous
 					</button>
 				</div>
 				<div class="level-item">
-					<button class="button is-info is-rounded">
+					<button
+						class="button is-info is-rounded"
+						:disabled="!hasNext"
+						@click="pageHandler(true)"
+					>
 						Next &gt;&gt;
 					</button>
 				</div>

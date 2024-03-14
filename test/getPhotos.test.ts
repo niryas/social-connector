@@ -47,6 +47,14 @@ const handlers = [
 			photoResponse.data[0].media_url += "/media_before";
 		}
 
+		if (accessToken === "addNext") {
+			photoResponse.paging["next"] = "http://localhost/next_url";
+		}
+
+		if (accessToken === "addPrev") {
+			photoResponse.paging["previous"] = "http://localhost/prev_url";
+		}
+
 		return HttpResponse.json(photoResponse);
 	}),
 ];
@@ -108,6 +116,38 @@ describe("Instagram getPhotos() method and related", () => {
 
 		const firstPhoto = photos[0];
 		expect(firstPhoto.picture).toContain("before");
+	});
+
+	test("showNext() is true when there's more photos", async () => {
+		const instance = Instagram.getInstance(instanceOptions);
+		instance["accessToken"] = "addNext";
+
+		await instance.getPhotos();
+		expect(instance.showNext()).toBeTruthy();
+	});
+
+	test("showNext() is false when there's no more photos", async () => {
+		const instance = Instagram.getInstance(instanceOptions);
+		instance["accessToken"] = "123";
+
+		await instance.getPhotos();
+		expect(instance.showNext()).toBeFalsy();
+	});
+
+	test("showPrevious() is true when there's a previous page", async () => {
+		const instance = Instagram.getInstance(instanceOptions);
+		instance["accessToken"] = "addPrev";
+
+		await instance.getPhotos();
+		expect(instance.showPrevious()).toBeTruthy();
+	});
+
+	test("showPrevious() is false when there's no previous page", async () => {
+		const instance = Instagram.getInstance(instanceOptions);
+		instance["accessToken"] = "123";
+
+		await instance.getPhotos();
+		expect(instance.showPrevious()).toBeFalsy();
 	});
 
 	test("getPhotoUrl() returns Url of requested photo", async () => {
