@@ -52,5 +52,6 @@ export default defineConfig({
 			// @TODO
 			// {icon: "github", link: "https://github.com/vuejs/vitepress"}
 		],
+		outline: "deep",
 	},
 });
