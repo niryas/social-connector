@@ -109,7 +109,7 @@ as part of this request.
 
 ::: danger IMPORTANT
 All URLs of this redirection file (e.g., development, staging, production environments) should be listed under
-Redirect URIs in the Meta Developer Platform's Instagram Basic Display Settings.
+`Valid OAuth Redirect URIs` in the Meta Developer Platform's Instagram Basic Display Settings.
 :::
 
 The redirection target should take the full query string passed by Instagram, add it to localstorage, and
