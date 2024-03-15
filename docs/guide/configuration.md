@@ -16,7 +16,9 @@ const options: InstagramInstanceOptionsInterface = {
 };
 ```
 
-## appId
+## Options
+
+### appId
 
 -   Type: `string`
 -   Required
@@ -28,7 +30,7 @@ Make sure to update this value depending on being in development or production i
 the _Meta Developer Platform_.
 :::
 
-## redirectUri
+### redirectUri
 
 -   Type: `string`
 -   Required
@@ -36,7 +38,7 @@ the _Meta Developer Platform_.
 The URL by which the static redirect file is available. **Must** be served by HTTPS also on development.
 Should be listed under `Valid OAuth Redirect URIs` in _Meta Developer Platform_.
 
-## tokenBackendUri
+### tokenBackendUri
 
 -   Type: `string`
 -   Required
@@ -49,7 +51,7 @@ that allows calling the API's endpoints.
 If the URL is located on a different origin (domain / port), make sure to set up the proper CORS headers in the backend.
 :::
 
-## afterTokenFunction
+### afterTokenFunction
 
 -   Type: `() => void`
 -   Required (Flow will not be able to load photos without it)
@@ -70,7 +72,7 @@ const options = {
 };
 ```
 
-## api
+### api
 
 -   Type: `new () => APIAbstract`
 -   Default: `API`
