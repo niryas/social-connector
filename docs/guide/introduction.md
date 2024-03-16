@@ -9,7 +9,7 @@ Documentation is still under constructions.
 Social Connector is a lightweight TypeScript-based client for communicating with _Instagram Basic Display API_.
 The main use case for Social Connector is allowing users to upload photos from their Instagram to your app.
 It is the first functionality that is available, but further functions can be added as well.
-Adding more social networks, with the same API towards your app, is also a possibility.
+Adding more social networks, with the same API towards your app, is also a possibility for the future.
 
 It can also be an example on how to integrate _Instagram Basic Display API_ on your own, without using the package
 directly.
@@ -30,10 +30,26 @@ The documentation for handling the entire flow is not complete and every develop
 fill in some steps on their own.
 
 If your app is integrating with multiple social networks for the same features (such as, uploading a photo from the
-social network to the app) - you can also abstract a lot to your own API, and simplify your app code accordingly.
+social network to the app) - you can also abstract a lot of logic to your own API, and simplify your app code accordingly.
 
 The project's goal is to answer to both points: allow a simple and easy integration with _Instagram Basic Display API_,
-while also abstracting other social networks' API to the same interface for simple integration.
+while also allowing abstraction of other social networks' APIs to use the same interface for simple integration.
+
+## Features
+
+-   Connect your Webapp to _Instagram Basic Display API_.
+-   Get the User's photos.
+-   Pagination of the API responses.
+-   Use a custom HTTP request handler if needed / preferred.
+
+## Limitations
+
+-   No support for videos yet (but can be easily added).
+-   No support for Carousel Album.
+-   Cannot login using a Hybrid Web App. A `capacitor.js` plugin solving it will be released soon.
+-   Only uses a short-term token for a single session. Long-term pairing with Instagram (and usage of a long-term token)
+    is not supported and will require more integration effort (as it depends on the framework used for
+    frontend and backend).
 
 ## Note
 
