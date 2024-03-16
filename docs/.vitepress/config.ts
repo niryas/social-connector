@@ -26,6 +26,7 @@ export default defineConfig({
 						text: "Extending Social Connector",
 						link: "/guide/extending",
 					},
+					{ text: "Contribution", link: "/guide/contribution" },
 				],
 			},
 			{

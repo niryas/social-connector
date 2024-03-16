@@ -2,7 +2,8 @@
 
 ## Initialization and Redirect URL
 
-Follow the [Getting Started](/guide/getting-started) guide, which includes the full documentation for both.
+Follow the [Getting Started](/guide/getting-started) guide for proper initialization of `social-connector`.
+This guide also includes detailed instructions on setting up the Redirect URL.
 
 ## Click Handler
 
@@ -42,8 +43,8 @@ Use this function to request photos and set pagination (see below).
 
 ## Pagination: Next / Previous
 
-The `Instagram` instance exposes two functions, which return a boolean value - whether there is a next page
-or previous page for the API call:
+The `Instagram` instance exposes two functions, both of which return a boolean value - to determine whether there is
+a next page or previous page for the API call:
 
 ```ts
 const ig = Instagram.getInstance();
