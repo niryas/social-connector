@@ -45,10 +45,10 @@ yarn add @social-connector/social-connector
 
 ### Importing and usage
 
-The package exposes a default import. You can import it with the following command:
+The package exposes an `Instagram` named import. You can import it with the following command:
 
 ```ts
-import Instagram from "@social-connector/social-connector";
+import { Instagram } from "@social-connector/social-connector";
 ```
 
 Set the App ID and Redirect URI. In this example they are separated to their own variables,
