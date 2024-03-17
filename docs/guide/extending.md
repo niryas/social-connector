@@ -1,7 +1,7 @@
 # Extending Social Connector
 
 ::: info
-For Contribution guidance, check out the [Contribution](/guide/contribution) Section.
+For Contributing guidance, check out the [Contributing Guide](/CONTRIBUTING) Section.
 :::
 
 ## Adding features

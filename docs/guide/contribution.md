@@ -1,1 +1,0 @@
-# Contribution to `social-connector`
