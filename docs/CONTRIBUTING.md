@@ -20,8 +20,15 @@ Please add a detailed description of the feature and the use case.
 1. Fork this repository.
 2. Clone the forked repo to your local machine.
 3. Run `npm install` inside the root folder.
-4. You can now run either `npm run dev` or `npm run docs:dev`, depending on if you are developing the library or the
+4. If you are developing the library, add the following environment variables:
+
+    ```shell
+    VITE_IG_APP_ID="YOUR_INSTAGRAM_APP_ID";
+    VITE_IG_REDIRECT_URI="https://YOUR_REDIRECT_URI/";
+    ```
+
+5. You can now run either `npm run dev` or `npm run docs:dev`, depending on if you are developing the library or the
    documentation.
-5. Develop!
+6. Develop!
 
 [issues]: https://github.com/niryas/social-connector/issues
