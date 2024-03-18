@@ -45,10 +45,10 @@ yarn add @social-connector/social-connector
 
 ### Importing and usage
 
-The package exposes an `Instagram` named import. You can import it with the following command:
+The package exposes an `InstagramClient` named import. You can import it with the following command:
 
 ```ts
-import { Instagram } from "@social-connector/social-connector";
+import { InstagramClient } from "@social-connector/social-connector";
 ```
 
 Set the App ID and Redirect URI. In this example they are separated to their own variables,
@@ -69,7 +69,7 @@ instantiate the Instagram Client of the package:
 
 ```ts
 // Only run on client when DOM is ready (e.g., Vue onMounted hook):
-let ig = Instagram.getInstance({
+let ig = InstagramClient.getInstance({
 	appId: igAppId,
 	redirectUri: igRedirectUri,
 

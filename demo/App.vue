@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Instagram from "../src/Instagram";
+import InstagramClient from "../src/InstagramClient";
 import { onMounted, ref } from "vue";
 import { DIRECTION } from "../src/SocialConnector";
 
@@ -11,15 +11,15 @@ let hasNext = ref(false);
 let hasPrevious = ref(false);
 
 async function pageHandler(next?: boolean) {
-	photos.value = await Instagram.getInstance().getPhotos(
+	photos.value = await InstagramClient.getInstance().getPhotos(
 		next ? DIRECTION.NEXT : DIRECTION.PREVIOUS,
 	);
-	hasNext.value = Instagram.getInstance().showNext();
-	hasPrevious.value = Instagram.getInstance().showPrevious();
+	hasNext.value = InstagramClient.getInstance().showNext();
+	hasPrevious.value = InstagramClient.getInstance().showPrevious();
 }
 
 onMounted(() => {
-	let ig = Instagram.getInstance({
+	let ig = InstagramClient.getInstance({
 		appId: igAppId,
 		redirectUri: igRedirectUri,
 		tokenBackendUri: "http://localhost:8000/api/ig_token/",
@@ -39,7 +39,7 @@ onMounted(() => {
 			<button
 				type="button"
 				class="button is-primary is-rounded"
-				@click="Instagram.clickHandler"
+				@click="InstagramClient.clickHandler"
 			>
 				Connect to Instagram
 			</button>

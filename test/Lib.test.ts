@@ -1,15 +1,15 @@
 import { describe, test, expect } from "vitest";
-import { Instagram, DIRECTION } from "../";
-import IG from "../src/Instagram";
+import { InstagramClient, DIRECTION } from "../";
+import IG from "../src/InstagramClient";
 import { DIRECTION as DIR } from "../src/SocialConnector";
 
 describe("Built library", () => {
-	test("Instagram class is a named import", () => {
-		expect(Instagram).toBeDefined();
+	test("InstagramClient class is a named import", () => {
+		expect(InstagramClient).toBeDefined();
 	});
 
-	test("Instagram import is of type Instagram", () => {
-		expect(Instagram).toBeTypeOf(typeof IG);
+	test("InstagramClient import is of type Instagram", () => {
+		expect(InstagramClient).toBeTypeOf(typeof IG);
 	});
 
 	test("DIRECTION import is of type DIRECTION", () => {

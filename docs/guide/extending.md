@@ -15,7 +15,7 @@ and provide additional functionality. There is no need to create a new class, un
 feature.
 
 ```ts
-class CustomInstagram extends Instagram {
+class CustomInstagramClient extends InstagramClient {
 	public myNewFeature() {
 		// do something
 	}
@@ -36,7 +36,7 @@ base class to extend from is also a possibility - to rewrite logic to change the
 For example, rewriting the `clickHandler` logic:
 
 ```ts
-class CustomInstagram extends Instagram {
+class CustomInstagramClient extends InstagramClient {
 	public async clickHandler() {
 		const someData = await this.getSomeData();
 		if (!someData) throw new Error("Couldn't get data");
@@ -62,7 +62,7 @@ It should then be exported as default. Example:
 // /src/Instagram.ts
 import SocialConnector from "./SocialConnector";
 
-export default class Instagram extends SocialConnector {
+export default class InstagramClient extends SocialConnector {
 	// ...
 }
 ```

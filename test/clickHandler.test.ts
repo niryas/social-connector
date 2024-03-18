@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { InstagramInstanceOptionsInterface } from "../src/interfaces/InstagramInstanceOptions";
-import Instagram from "../src/Instagram";
+import InstagramClient from "../src/InstagramClient";
 
-describe("Instagram clickHandler", () => {
+describe("InstagramClient clickHandler", () => {
 	let instanceOptions: InstagramInstanceOptionsInterface;
 	let mockAfterToken: ReturnType<typeof vi.fn>;
 	beforeEach(() => {
@@ -15,11 +15,11 @@ describe("Instagram clickHandler", () => {
 		};
 	});
 	afterEach(() => {
-		Instagram["instance"] = undefined;
+		InstagramClient["instance"] = undefined;
 	});
 
 	test("calls afterTokenFunction if token is valid", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		expect(instance).toBeDefined();
 		instance["accessToken"] = "testToken";
 		instance["tokenExpiry"] = Date.now() + 59 * 60 * 1000;
@@ -29,7 +29,7 @@ describe("Instagram clickHandler", () => {
 	});
 
 	test("goes to auth login url if token expired / non-existent", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		expect(instance).toBeDefined();
 
 		const location = { href: "" };
@@ -43,16 +43,16 @@ describe("Instagram clickHandler", () => {
 	});
 
 	test("static method returns instance method", () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		expect(instance).toBeDefined();
 
 		instance.clickHandler = vi.fn();
-		Instagram.clickHandler();
+		InstagramClient.clickHandler();
 		expect(instance.clickHandler).toHaveBeenCalledOnce();
 	});
 
 	test("static method errors if instance hasn't been initialized", () => {
-		expect(() => Instagram.clickHandler()).toThrowError(
+		expect(() => InstagramClient.clickHandler()).toThrowError(
 			"Must call getInstance",
 		);
 	});

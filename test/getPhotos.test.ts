@@ -10,7 +10,7 @@ import {
 	test,
 } from "vitest";
 import { InstagramInstanceOptionsInterface } from "../src/interfaces/InstagramInstanceOptions";
-import Instagram from "../src/Instagram";
+import InstagramClient from "../src/InstagramClient";
 import { DIRECTION } from "../src/SocialConnector";
 
 const handlers = [
@@ -61,7 +61,7 @@ const handlers = [
 
 const server = setupServer(...handlers);
 
-describe("Instagram getPhotos() method and related", () => {
+describe("InstagramClient getPhotos() method and related", () => {
 	let instanceOptions: InstagramInstanceOptionsInterface;
 	beforeEach(() => {
 		instanceOptions = {
@@ -72,7 +72,7 @@ describe("Instagram getPhotos() method and related", () => {
 	});
 
 	afterEach(() => {
-		Instagram["instance"] = undefined;
+		InstagramClient["instance"] = undefined;
 		server.resetHandlers();
 	});
 
@@ -81,7 +81,7 @@ describe("Instagram getPhotos() method and related", () => {
 	afterAll(() => server.close());
 
 	test("loads photos", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		instance["accessToken"] = "123";
 		const photos = await instance.getPhotos();
 
@@ -93,7 +93,7 @@ describe("Instagram getPhotos() method and related", () => {
 	});
 
 	test("sends after correctly", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		instance["accessToken"] = "123";
 		instance["after"] = "afterCursor";
 
@@ -106,7 +106,7 @@ describe("Instagram getPhotos() method and related", () => {
 	});
 
 	test("sends before correctly", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		instance["accessToken"] = "123";
 		instance["before"] = "beforeCursor";
 
@@ -119,7 +119,7 @@ describe("Instagram getPhotos() method and related", () => {
 	});
 
 	test("showNext() is true when there's more photos", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		instance["accessToken"] = "addNext";
 
 		await instance.getPhotos();
@@ -127,7 +127,7 @@ describe("Instagram getPhotos() method and related", () => {
 	});
 
 	test("showNext() is false when there's no more photos", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		instance["accessToken"] = "123";
 
 		await instance.getPhotos();
@@ -135,7 +135,7 @@ describe("Instagram getPhotos() method and related", () => {
 	});
 
 	test("showPrevious() is true when there's a previous page", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		instance["accessToken"] = "addPrev";
 
 		await instance.getPhotos();
@@ -143,7 +143,7 @@ describe("Instagram getPhotos() method and related", () => {
 	});
 
 	test("showPrevious() is false when there's no previous page", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		instance["accessToken"] = "123";
 
 		await instance.getPhotos();
@@ -151,17 +151,17 @@ describe("Instagram getPhotos() method and related", () => {
 	});
 
 	test("getPhotoUrl() returns Url of requested photo", async () => {
-		const instance = Instagram.getInstance(instanceOptions);
+		const instance = InstagramClient.getInstance(instanceOptions);
 		instance["accessToken"] = "123";
 		await instance.getPhotos();
 
-		expect(await Instagram.getPhotoUrl("1819859339218")).toBe(
+		expect(await InstagramClient.getPhotoUrl("1819859339218")).toBe(
 			"http://localhost/media_url",
 		);
 	});
 
 	test("getPhotoUrl() returns empty string if no photo found", async () => {
-		Instagram.getInstance(instanceOptions);
-		expect(await Instagram.getPhotoUrl("1819859339218")).toBe("");
+		InstagramClient.getInstance(instanceOptions);
+		expect(await InstagramClient.getPhotoUrl("1819859339218")).toBe("");
 	});
 });

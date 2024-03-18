@@ -8,7 +8,7 @@ import {
 	beforeAll,
 	afterAll,
 } from "vitest";
-import Instagram from "../src/Instagram";
+import InstagramClient from "../src/InstagramClient";
 import { InstagramInstanceOptionsInterface } from "../src/interfaces/InstagramInstanceOptions";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
@@ -65,12 +65,12 @@ describe("Instagram", () => {
 		};
 	});
 	afterEach(() => {
-		Instagram["instance"] = undefined;
+		InstagramClient["instance"] = undefined;
 	});
 
 	describe("getInstance", () => {
 		test("creates new instance with appId, redirectUri & tokenBackend", () => {
-			const instance = Instagram.getInstance(instanceOptions);
+			const instance = InstagramClient.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
 			expect(instance["appId"]).toBe(instanceOptions.appId);
 			expect(instance["redirectUri"]).toBe(instanceOptions.redirectUri);
@@ -80,7 +80,7 @@ describe("Instagram", () => {
 		});
 
 		test("throws error if tries to initialize instance with no options", () => {
-			expect(() => Instagram.getInstance()).toThrowError();
+			expect(() => InstagramClient.getInstance()).toThrowError();
 		});
 
 		test("can use a custom API class", () => {
@@ -97,7 +97,7 @@ describe("Instagram", () => {
 			}
 
 			instanceOptions.api = CustomAPI;
-			const instance = Instagram.getInstance(instanceOptions);
+			const instance = InstagramClient.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
 			instance["api"].get("http://localhost");
 			expect(dummyFetch).toHaveBeenCalledOnce();
@@ -109,21 +109,22 @@ describe("Instagram", () => {
 
 		test("throws an error when no appId is provided", () => {
 			instanceOptions.appId = undefined;
-			expect(() => Instagram.getInstance(instanceOptions)).toThrowError(
-				"Cannot initialize",
-			);
+			expect(() =>
+				InstagramClient.getInstance(instanceOptions),
+			).toThrowError("Cannot initialize");
 		});
 
 		test("throws an error when no redirectUri is provided", () => {
 			instanceOptions.redirectUri = undefined;
-			expect(() => Instagram.getInstance(instanceOptions)).toThrowError(
-				"Cannot initialize",
-			);
+			expect(() =>
+				InstagramClient.getInstance(instanceOptions),
+			).toThrowError("Cannot initialize");
 		});
 
 		test("returns the same instance on subsequent calls", () => {
-			const instance = Instagram.getInstance(instanceOptions);
-			const anotherInstance = Instagram.getInstance(instanceOptions);
+			const instance = InstagramClient.getInstance(instanceOptions);
+			const anotherInstance =
+				InstagramClient.getInstance(instanceOptions);
 			expect(anotherInstance).toBe(instance);
 		});
 	});
@@ -131,7 +132,7 @@ describe("Instagram", () => {
 	describe("default afterTokenFunction", () => {
 		test("logs console error when called", () => {
 			const spy = vi.spyOn(console, "error");
-			const instance = Instagram.getInstance(instanceOptions);
+			const instance = InstagramClient.getInstance(instanceOptions);
 			instance["afterTokenFunction"]();
 			expect(spy).toHaveBeenCalled();
 		});
@@ -154,27 +155,27 @@ describe("Instagram", () => {
 		afterAll(() => server.close());
 
 		test("doesn't call afterAuthRedirect if no token is passed by localstorage", () => {
-			Instagram.getInstance(instanceOptions);
+			InstagramClient.getInstance(instanceOptions);
 			expect(storage.getItem).toHaveBeenCalled();
 			expect(storage.removeItem).not.toHaveBeenCalled();
 		});
 		test("removes localstorage item if exist", () => {
 			storage.getItem.mockImplementation(() => "test");
-			Instagram.getInstance(instanceOptions);
+			InstagramClient.getInstance(instanceOptions);
 			expect(storage.getItem).toHaveBeenCalled();
 			expect(storage.removeItem).toHaveBeenCalled();
 		});
 		test("handles errors of the auth token gracefully", () => {
 			storage.getItem.mockImplementation(() => "test"); // No code attribute, will return error
 			const spy = vi.spyOn(console, "error");
-			const instance = Instagram.getInstance(instanceOptions);
+			const instance = InstagramClient.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
 			expect(spy).toHaveBeenCalled();
 		});
 		test("handles IG API errors gracefully", async () => {
 			storage.getItem.mockImplementation(() => "?code=returnError");
 			const spy = vi.spyOn(console, "error");
-			const instance = Instagram.getInstance(instanceOptions);
+			const instance = InstagramClient.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
 
 			await vi.waitFor(() => {
@@ -185,7 +186,7 @@ describe("Instagram", () => {
 		test("handles IG API errors gracefully when api resolves without token", async () => {
 			storage.getItem.mockImplementation(() => "?code=returnErrorBut200");
 			const spy = vi.spyOn(console, "error");
-			const instance = Instagram.getInstance(instanceOptions);
+			const instance = InstagramClient.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
 
 			await vi.waitFor(() => {
@@ -196,7 +197,7 @@ describe("Instagram", () => {
 		test("sets token and expiry time correctly", async () => {
 			storage.getItem.mockImplementation(() => "?code=returnToken");
 			instanceOptions.afterTokenFunction = vi.fn();
-			const instance = Instagram.getInstance(instanceOptions);
+			const instance = InstagramClient.getInstance(instanceOptions);
 			expect(instance).toBeDefined();
 
 			const token = await vi.waitFor(() => {
@@ -211,7 +212,7 @@ describe("Instagram", () => {
 			expect(token).toBe("testToken");
 			expect(expiryTime).toBeGreaterThan(Date.now() + 58 * 60 * 1000);
 			expect(instanceOptions.afterTokenFunction).toHaveBeenCalled();
-			expect(Instagram.getUserId()).toBe("testUser");
+			expect(InstagramClient.getUserId()).toBe("testUser");
 		});
 	});
 });

@@ -8,7 +8,7 @@ Follow the [Getting Started](/guide/getting-started) guide for requirements, ins
 
 ## Initialization
 
-The Instagram class should be initialized using the `onMounted` hook. This makes the code run on the client-side only,
+The InstagramClient class should be initialized using the `onMounted` hook. This makes the code run on the client-side only,
 and waits for the DOM to be available.
 
 ```ts

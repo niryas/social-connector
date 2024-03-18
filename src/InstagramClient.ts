@@ -14,8 +14,8 @@ const TOKEN_EXPIRY = 59 * 60 * 1000;
 /** Instagram OAuth URL API Endpoint */
 const INSTAGRAM_AUTH_URL = "https://api.instagram.com/oauth/authorize";
 
-export default class Instagram extends SocialConnector {
-	private static instance: Instagram;
+export default class InstagramClient extends SocialConnector {
+	private static instance: InstagramClient;
 	private tokenExpiry = 0;
 	private redirectUri = "";
 	private photos: Array<SocialPhoto> = [];
@@ -42,7 +42,7 @@ export default class Instagram extends SocialConnector {
 			api,
 		);
 	}
-	/** The Instagram class is a Singleton object. Use the getInstance() method to get
+	/** The InstagramClient class is a Singleton object. Use the getInstance() method to get
 	 *  or instantiate an instance.
 	 *
 	 *  On the first call to getInstance, a required options {InstagramInstanceOptionsInterface} parameter
@@ -58,28 +58,28 @@ export default class Instagram extends SocialConnector {
 	 * */
 	public static getInstance(
 		options?: InstagramInstanceOptionsInterface,
-	): Instagram {
-		if (!Instagram.instance) {
-			Instagram.instance = new Instagram(options ?? {});
+	): InstagramClient {
+		if (!InstagramClient.instance) {
+			InstagramClient.instance = new InstagramClient(options ?? {});
 		}
 
 		if (options?.redirectUri) {
-			Instagram.instance.redirectUri = options.redirectUri;
+			InstagramClient.instance.redirectUri = options.redirectUri;
 		}
 
-		if (!Instagram.instance.redirectUri) {
+		if (!InstagramClient.instance.redirectUri) {
 			throw new Error(
 				"Cannot initialize Instagram Social Connector without a redirect uri",
 			);
 		}
 
 		if (options?.tokenBackendUri) {
-			Instagram.instance.tokenBackendUri = options.tokenBackendUri;
+			InstagramClient.instance.tokenBackendUri = options.tokenBackendUri;
 		}
 
-		Instagram.instance.processRedirect();
+		InstagramClient.instance.processRedirect();
 
-		return Instagram.instance;
+		return InstagramClient.instance;
 	}
 
 	private get authFullUrl(): string {
