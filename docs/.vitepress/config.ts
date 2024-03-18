@@ -44,7 +44,10 @@ export default defineConfig({
 						text: "SocialConnector",
 						link: "/reference/social-connector",
 					},
-					{ text: "Instagram", link: "/reference/instagram" },
+					{
+						text: "InstagramClient",
+						link: "/reference/instagram-client",
+					},
 				],
 			},
 		],
