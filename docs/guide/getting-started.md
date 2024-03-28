@@ -146,7 +146,10 @@ It is not possible to set up an Instagram integration without a Token Exchange b
 
 Depending on your architecture, you can choose one of the following:
 
-1. ...
+1. Use `django-social-connector` [django app](https://github.com/niryas/django-social-connector) - **not for production use at this point**.
+2. Use an OAuth-2 package which supports your backend environment and customize it (if needed) for Instagram Basic Display API.
+   Most packages are an overkill for what is needed for this purpose.
+3. Write your own implementation as part of your existing backend.
 
 ## Running and Testing the Integration
 
