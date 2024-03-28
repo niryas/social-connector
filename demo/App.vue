@@ -22,7 +22,7 @@ onMounted(() => {
 	let ig = InstagramClient.getInstance({
 		appId: igAppId,
 		redirectUri: igRedirectUri,
-		tokenBackendUri: "http://localhost:8000/api/ig_token/",
+		tokenBackendUri: "http://localhost:8000/ig_token/",
 		async afterTokenFunction() {
 			photos.value = await ig.getPhotos();
 			hasNext.value = ig.showNext();
