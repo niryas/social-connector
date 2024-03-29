@@ -10,7 +10,7 @@ There are three components required to use Social Connector and connect to _Inst
 
 1. Social Connector frontend package (`@social-connector/social-connector`)
 2. A redirect target file (can be a plain static html file, such as `/public/ig_auth.html`)
-3. Token Exchange backend (...)
+3. Token Exchange backend (exchanging the authorization token to a short-term access token)
 
 In addition, an Instagram App should be created in [Meta's Developer Platform](https://developers.facebook.com).
 Instagram users for testing should also be added to the app using Meta's platform.
