@@ -1,9 +1,17 @@
 {
 	"name": "@social-connector/social-connector",
 	"description": "Simple TypeScript integration with Instagram Basic Display API",
-	"private": true,
-	"version": "0.0.0",
+	"version": "0.1.0",
+	"author": "Nir Yasoor",
 	"type": "module",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/niryas/social-connector.git"
+	},
+	"bugs": {
+		"url": "https://github.com/niryas/social-connector/issues"
+	},
 	"files": [
 		"dist",
 		"LICENSE",
