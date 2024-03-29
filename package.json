@@ -17,6 +17,14 @@
 		"LICENSE",
 		"README.md"
 	],
+	"keywords": [
+		"instagram",
+		"typescript",
+		"typescript-library",
+		"javascript-library",
+		"instagram-api",
+		"basic-display-api"
+	],
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",
