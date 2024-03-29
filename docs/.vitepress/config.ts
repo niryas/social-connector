@@ -60,4 +60,5 @@ export default defineConfig({
 		],
 		outline: "deep",
 	},
+	base: "/social-connector/",
 });
