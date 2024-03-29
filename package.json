@@ -1,7 +1,7 @@
 {
 	"name": "@social-connector/social-connector",
 	"description": "Simple TypeScript integration with Instagram Basic Display API",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"author": "Nir Yasoor",
 	"type": "module",
 	"license": "MIT",
