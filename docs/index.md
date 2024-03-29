@@ -18,10 +18,8 @@ hero:
           link: /reference/instagram
 
 features:
-    - title: Feature A
-      details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-    - title: Feature B
-      details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-    - title: Feature C
-      details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+    - title: Use as a base
+      details: Extend to configure the integration needed for your project.
+    - title: Use as an integration guide
+      details: Create your own integration, following social-connector as a guide.
 ---
