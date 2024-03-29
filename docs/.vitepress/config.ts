@@ -53,8 +53,10 @@ export default defineConfig({
 		],
 
 		socialLinks: [
-			// @TODO
-			// {icon: "github", link: "https://github.com/vuejs/vitepress"}
+			{
+				icon: "github",
+				link: "https://github.com/niryas/social-connector",
+			},
 		],
 		outline: "deep",
 	},
