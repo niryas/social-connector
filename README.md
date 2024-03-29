@@ -7,13 +7,13 @@ or as a hands-on guide on how to develop the integration on your own.
 
 ## Installing / Getting started
 
-Check out the [full documentation]() for instructions.
+Check out the [full documentation](https://niryas.github.io/social-connector) for instructions.
 
 ## Developing
 
 To further develop this package, fork it and checkout to your local machine.
 
-### Follow the [Getting Started]() guide regarding:
+### Follow the [Getting Started](https://niryas.github.io/social-connector/guide/getting-started) guide regarding:
 
 -   Setting up an App in Meta's Developer Platform.
 -   Setting up HTTPS and adding the redirect URI to Meta's Developer Platform.
@@ -58,11 +58,15 @@ All documentation site files are inside the `docs` folder.
 ## Contributing
 
 Contributions are greatly appreciated!
-Check out the [Contributing Guide]() for more details.
+Check out the [Contributing Guide](https://niryas.github.io/social-connector/CONTRIBUTING) for more details.
 
 ## Links
 
-...
+-   Documentation Site: https://niryas.github.io/social-connector/
+-   Repository: https://github.com/niryas/social-connector
+-   Getting Started Guide: https://niryas.github.io/social-connector/guide/getting-started
+-   Contributing Guide: https://niryas.github.io/social-connector/CONTRIBUTING
+-   `django-social-connector` (Token Exchange Backend): https://github.com/niryas/django-social-connector
 
 ## Licensing
 
